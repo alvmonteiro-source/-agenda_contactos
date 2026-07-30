@@ -1,0 +1,1969 @@
+{
+  "versao": "1.0",
+  "data": "2026-07-30",
+  "utilizadores": [
+    {
+      "username": "maria_santos",
+      "email": "maria@email.com",
+      "password": "123456",
+      "status": "active",
+      "role": "admin",
+      "pagePermissions": {
+        "contactos": [
+          "ver",
+          "criar",
+          "criar_entidade",
+          "editar",
+          "apagar",
+          "importar",
+          "exportar",
+          "backup"
+        ],
+        "grupos": [
+          "ver",
+          "criar",
+          "editar",
+          "apagar",
+          "gerir_contactos",
+          "enviar_email"
+        ],
+        "utilizadores": [
+          "ver",
+          "criar",
+          "editar",
+          "apagar",
+          "ativar_desativar",
+          "ver_senhas"
+        ],
+        "acessos": [
+          "ver",
+          "exportar",
+          "limpar",
+          "ver_detalhes"
+        ],
+        "permissoes": [
+          "ver",
+          "editar",
+          "gerir_funcoes",
+          "atribuir_todas"
+        ],
+        "partilhar": [
+          "ver",
+          "partilhar"
+        ],
+        "painel": [
+          "ver",
+          "ver_estatisticas"
+        ]
+      }
+    },
+    {
+      "username": "pedro_costa",
+      "email": "pedro@email.com",
+      "password": "123456",
+      "status": "active",
+      "role": "user",
+      "pagePermissions": {
+        "contactos": [
+          "ver",
+          "criar",
+          "criar_entidade",
+          "editar"
+        ],
+        "grupos": [
+          "ver",
+          "criar",
+          "editar",
+          "gerir_contactos"
+        ],
+        "utilizadores": [
+          "ver"
+        ],
+        "acessos": [
+          "ver"
+        ],
+        "permissoes": [
+          "ver"
+        ],
+        "partilhar": [],
+        "painel": [
+          "ver"
+        ]
+      }
+    },
+    {
+      "username": "ana_oliveira",
+      "email": "ana@email.com",
+      "password": "123456",
+      "status": "active",
+      "role": "user",
+      "pagePermissions": {
+        "contactos": [
+          "ver",
+          "criar",
+          "criar_entidade",
+          "editar",
+          "apagar",
+          "importar",
+          "exportar"
+        ],
+        "grupos": [
+          "ver",
+          "criar",
+          "editar",
+          "apagar",
+          "gerir_contactos",
+          "enviar_email"
+        ],
+        "utilizadores": [
+          "ver",
+          "editar"
+        ],
+        "acessos": [
+          "ver"
+        ],
+        "permissoes": [
+          "ver"
+        ],
+        "partilhar": [],
+        "painel": [
+          "ver"
+        ]
+      }
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "password": "123456",
+      "status": "active",
+      "role": "admin",
+      "pagePermissions": {
+        "contactos": [
+          "ver",
+          "criar",
+          "criar_entidade",
+          "editar",
+          "apagar",
+          "importar",
+          "exportar",
+          "backup"
+        ],
+        "grupos": [
+          "ver",
+          "criar",
+          "editar",
+          "apagar",
+          "gerir_contactos",
+          "enviar_email"
+        ],
+        "utilizadores": [
+          "ver",
+          "criar",
+          "editar",
+          "apagar",
+          "ativar_desativar",
+          "ver_senhas"
+        ],
+        "acessos": [
+          "ver",
+          "exportar",
+          "limpar",
+          "ver_detalhes"
+        ],
+        "permissoes": [
+          "ver",
+          "editar",
+          "gerir_funcoes",
+          "atribuir_todas"
+        ],
+        "partilhar": [
+          "ver",
+          "partilhar"
+        ],
+        "painel": [
+          "ver",
+          "ver_estatisticas"
+        ]
+      }
+    },
+    {
+      "username": "Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "password": "123456",
+      "status": "active",
+      "role": "admin",
+      "pagePermissions": {
+        "contactos": [
+          "ver",
+          "criar",
+          "criar_entidade",
+          "editar",
+          "apagar",
+          "importar",
+          "exportar",
+          "backup"
+        ],
+        "grupos": [
+          "ver",
+          "criar",
+          "editar",
+          "apagar",
+          "gerir_contactos",
+          "enviar_email"
+        ],
+        "utilizadores": [
+          "ver",
+          "criar",
+          "editar",
+          "apagar",
+          "ativar_desativar",
+          "ver_senhas"
+        ],
+        "acessos": [
+          "ver",
+          "exportar",
+          "limpar",
+          "ver_detalhes"
+        ],
+        "permissoes": [
+          "ver",
+          "editar",
+          "gerir_funcoes",
+          "atribuir_todas"
+        ],
+        "partilhar": [
+          "ver",
+          "partilhar"
+        ],
+        "painel": [
+          "ver",
+          "ver_estatisticas"
+        ]
+      }
+    },
+    {
+      "username": "Monteiro",
+      "email": "afonsotropa473@gmail.com",
+      "password": "123456",
+      "status": "active",
+      "role": "viewer",
+      "pagePermissions": {
+        "contactos": [
+          "ver",
+          "criar",
+          "editar",
+          "apagar"
+        ],
+        "grupos": [
+          "ver",
+          "criar",
+          "editar",
+          "apagar"
+        ],
+        "utilizadores": [
+          "ver",
+          "criar",
+          "editar",
+          "apagar"
+        ],
+        "acessos": [
+          "ver"
+        ],
+        "permissoes": [],
+        "partilhar": [],
+        "painel": [
+          "ver"
+        ]
+      }
+    }
+  ],
+  "contactos": [
+    {
+      "nome": "Olegário Gonçalves",
+      "cargo": "Presidente",
+      "entidade": "Câmara Municipal de Arcos De Valdevez",
+      "tipo": "Camara Municipal",
+      "departamento": "Gabinete do Presidente",
+      "rua": "Praça Municipal",
+      "numero": "",
+      "codigoPostal": "4974-003",
+      "localidade": "Aecos de Valdevez",
+      "distrito": "Viana do Castelo",
+      "concelho": "Arcos de Valdevez",
+      "freguesia": "União das freguesias de Arcos de Valdevez (Salvador), Vila Fonche e Parada",
+      "notas": "",
+      "telefones": [
+        "258520500"
+      ],
+      "telemoveis": [],
+      "faxes": [],
+      "satelite": [],
+      "emails": [
+        "geral@cmav.pt"
+      ],
+      "id": "mrvhrf73863ob",
+      "dataCriacao": "2026-07-22"
+    },
+    {
+      "nome": "Liliana Silva",
+      "cargo": "Presidente",
+      "entidade": "Câmara Municipal de Caminha",
+      "tipo": "Camara Municipal",
+      "departamento": "Gabinete do Presidente",
+      "rua": "Largo Calouste Gulbenkian",
+      "numero": "",
+      "codigoPostal": "4910-113",
+      "localidade": "Caminha",
+      "distrito": "Viana do Castelo",
+      "concelho": "Caminha",
+      "freguesia": "União das freguesias de Caminha (Matriz) e Vilarelho",
+      "notas": "",
+      "telefones": [
+        "258710300"
+      ],
+      "telemoveis": [],
+      "faxes": [],
+      "satelite": [],
+      "emails": [
+        "geral@cm-caminha.pt"
+      ],
+      "id": "mrvhrf7387qv2",
+      "dataCriacao": "2026-07-22"
+    },
+    {
+      "nome": "José Albano Esteves Domingues",
+      "cargo": "Presidente",
+      "entidade": "Câmara Municipal de Melgaço",
+      "tipo": "Camara Municipal",
+      "departamento": "Gabinete do Presidente",
+      "rua": "Largo Hermenegildo Solheiro",
+      "numero": "",
+      "codigoPostal": "4960-551",
+      "localidade": "Melgaço",
+      "distrito": "Viana do Castelo",
+      "concelho": "Melgaço",
+      "freguesia": "União das freguesias de Vila e Roussas",
+      "notas": "",
+      "telefones": [
+        "251410100"
+      ],
+      "telemoveis": [],
+      "faxes": [],
+      "satelite": [],
+      "emails": [
+        "geral@cm-melgaco.pt"
+      ],
+      "id": "mrvhrf7364eli",
+      "dataCriacao": "2026-07-22"
+    },
+    {
+      "tipo": "Camara Municipal",
+      "departamento": "Gabinete do Presidente",
+      "cargo": "Presidente",
+      "entidade": "Câmara Municipal de Monção",
+      "nome": "António José Fernandes Barbosa",
+      "rua": "Largo de Camões",
+      "numero": "",
+      "codigoPostal": "4950–440",
+      "localidade": "Monção",
+      "distrito": "Viana do Castelo",
+      "concelho": "Monção",
+      "freguesia": "União das freguesias de Monção e Troviscoso",
+      "notas": "",
+      "telefones": [
+        "251649000"
+      ],
+      "telemoveis": [
+        "926908465"
+      ],
+      "faxes": [],
+      "satelite": [],
+      "emails": [
+        "gap@cm-moncao.pt"
+      ],
+      "id": "mrvhrf73elen3",
+      "dataCriacao": "2026-07-22"
+    },
+    {
+      "nome": "Tiago Manuel Pereira da Cunha",
+      "cargo": "Presidente",
+      "entidade": "Câmara Municipal de Paredes De Coura",
+      "tipo": "Camara Municipal",
+      "departamento": "Gabinete do Presidente",
+      "rua": "Largo Visconde de Mozelos, Ap.6",
+      "numero": "",
+      "codigoPostal": "4941-909",
+      "localidade": "Paredes de Coura",
+      "distrito": "Viana do Castelo",
+      "concelho": "Paredes de Coura",
+      "freguesia": "União das freguesias de Paredes de Coura e Resende",
+      "notas": "",
+      "telefones": [
+        "251780100"
+      ],
+      "telemoveis": [],
+      "faxes": [],
+      "satelite": [],
+      "emails": [
+        "geral@paredesdecoura.pt"
+      ],
+      "id": "mrvhrf73306l1",
+      "dataCriacao": "2026-07-22"
+    },
+    {
+      "nome": "Augusto Manuel dos Reis Marinho",
+      "cargo": "Presidente",
+      "entidade": "Câmara Municipal de Ponte Da Barca",
+      "tipo": "Camara Municipal",
+      "departamento": "Gabinete do Presidente",
+      "rua": "Praça Dr. António Lacerda",
+      "numero": "",
+      "codigoPostal": "4980-620",
+      "localidade": "Ponte da Barca",
+      "distrito": "Viana do Castelo",
+      "concelho": "Ponte da Barca",
+      "freguesia": "União das freguesias de Ponte da Barca, Vila Nova de Muía e Paço Vedro de Magalhães",
+      "notas": "",
+      "telefones": [
+        "258480180"
+      ],
+      "telemoveis": [],
+      "faxes": [],
+      "satelite": [],
+      "emails": [
+        "geral@cmpb.pt"
+      ],
+      "id": "mrvhrf737ww86",
+      "dataCriacao": "2026-07-22"
+    },
+    {
+      "nome": "Vasco Nuno Magalhães Velho de Almeida Ferraz",
+      "cargo": "Presidente",
+      "entidade": "Câmara Municipal de Ponte De Lima",
+      "tipo": "Camara Municipal",
+      "departamento": "Gabinete do Presidente",
+      "rua": "Praça da República",
+      "numero": "",
+      "codigoPostal": "4990-062",
+      "localidade": "Ponte de Lima",
+      "distrito": "Viana do Castelo",
+      "concelho": "Ponte de Lima",
+      "freguesia": "Arca e Ponte de Lima",
+      "notas": "",
+      "telefones": [
+        "258900400"
+      ],
+      "telemoveis": [],
+      "faxes": [],
+      "satelite": [],
+      "emails": [
+        "geral@cm-pontedelima.pt"
+      ],
+      "id": "mrvhrf73n0kw9",
+      "dataCriacao": "2026-07-22"
+    },
+    {
+      "nome": "José Manuel Vaz Carpinteira",
+      "cargo": "Presidente",
+      "entidade": "Câmara Municipal de Valença",
+      "tipo": "Camara Municipal",
+      "departamento": "Gabinete do Presidente",
+      "rua": "Praça da República",
+      "numero": "",
+      "codigoPostal": "4930-702",
+      "localidade": "Valença",
+      "distrito": "Viana do Castelo",
+      "concelho": "Valença",
+      "freguesia": "União das freguesias de Valença, Cristelo Covo e Arão",
+      "notas": "",
+      "telefones": [
+        "251809500"
+      ],
+      "telemoveis": [],
+      "faxes": [],
+      "satelite": [],
+      "emails": [
+        "geral@cm-valenca.pt"
+      ],
+      "id": "mrvhrf736ssf6",
+      "dataCriacao": "2026-07-22"
+    },
+    {
+      "nome": "Luís Nobre",
+      "cargo": "Presidente",
+      "entidade": "Câmara Municipal de Viana Do Castelo",
+      "tipo": "Camara Municipal",
+      "departamento": "Gabinete do Presidente",
+      "rua": "Passeio das Mordomas da Romaria",
+      "numero": "",
+      "codigoPostal": "4904-877",
+      "localidade": "Viana do Castelo",
+      "distrito": "Viana do Castelo",
+      "concelho": "Viana do Castelo",
+      "freguesia": "União das freguesias de Viana do Castelo (Santa Maria Maior e Monserrate) e Meadela",
+      "notas": "",
+      "telefones": [
+        "258809300"
+      ],
+      "telemoveis": [],
+      "faxes": [],
+      "satelite": [],
+      "emails": [
+        "cmviana@cm-viana-castelo.pt"
+      ],
+      "id": "mrvhrf733jwfo",
+      "dataCriacao": "2026-07-22"
+    },
+    {
+      "nome": "Rui Pedro Teixeira Ferreira da Silva",
+      "cargo": "Presidente",
+      "entidade": "Câmara Municipal de Vila Nova De Cerveira",
+      "tipo": "Camara Municipal",
+      "departamento": "Gabinete do Presidente",
+      "rua": "Praça do Município",
+      "numero": "",
+      "codigoPostal": "4920-284",
+      "localidade": "Vila Nova de Cerveira",
+      "distrito": "Viana do Castelo",
+      "concelho": "Vila Nova de Cerveira",
+      "freguesia": "União das freguesias de Vila Nova de Cerveira e Lovelhe",
+      "notas": "",
+      "telefones": [
+        "251708020"
+      ],
+      "telemoveis": [],
+      "faxes": [],
+      "satelite": [],
+      "emails": [
+        "geral@cm-vncerveira.pt"
+      ],
+      "id": "mrvhrf732y1k3",
+      "dataCriacao": "2026-07-22"
+    }
+  ],
+  "entidades": [
+    {
+      "sigla": "CM",
+      "codigoEntidade": "1601",
+      "tipoEntidade": "Camara Municipal",
+      "entidade": "Câmara Municipal de Arcos De Valdevez",
+      "dataFundacao": "",
+      "anos": "",
+      "rua": "Praça Municipal",
+      "numero": "",
+      "andar": "",
+      "codigoPostal": "4974-003",
+      "localidade": "Arcos de Valdevez",
+      "distrito": "Viana do Castelo",
+      "concelho": "Arcos de Valdevez",
+      "freguesia": "União das freguesias de Arcos de Valdevez (Salvador), Vila Fonche e Parada",
+      "pais": "Portugal",
+      "website": "",
+      "notas": "",
+      "telefones": [
+        {
+          "numero": "258520500",
+          "tipo": ""
+        }
+      ],
+      "telemoveis": [],
+      "faxes": [],
+      "satelite": [],
+      "emails": [
+        "geral@cmav.pt"
+      ],
+      "id": "ms1us33f0zyjf",
+      "dataCriacao": "2026-07-26"
+    },
+    {
+      "id": "ms1us33f9frv7",
+      "sigla": "CM",
+      "codigoEntidade": "1602",
+      "tipoEntidade": "Camara Municipal",
+      "entidade": "Câmara Municipal de Caminha",
+      "dataFundacao": "",
+      "anos": "",
+      "rua": "Largo Calouste Gulbenkian",
+      "numero": "",
+      "andar": "",
+      "codigoPostal": "4910-113",
+      "localidade": "Caminha",
+      "concelho": "Caminha",
+      "freguesia": "União das freguesias de Caminha (Matriz) e Vilarelho",
+      "distrito": "Viana do Castelo",
+      "pais": "Portugal",
+      "telefones": [
+        "258710300"
+      ],
+      "telemoveis": [],
+      "satelite": [],
+      "faxes": [],
+      "emails": [
+        "geral@cm-caminha.pt"
+      ],
+      "website": "",
+      "notas": "",
+      "dataCriacao": "2026-07-26"
+    },
+    {
+      "id": "ms1us33fgyww6",
+      "sigla": "CM",
+      "codigoEntidade": "1603",
+      "tipoEntidade": "Camara Municipal",
+      "entidade": "Câmara Municipal de Melgaço",
+      "dataFundacao": "",
+      "anos": "",
+      "rua": "Largo Hermenegildo Solheiro",
+      "numero": "",
+      "andar": "",
+      "codigoPostal": "4960-551",
+      "localidade": "Melgaço",
+      "concelho": "Melgaço",
+      "freguesia": "União das freguesias de Vila e Roussas",
+      "distrito": "Viana do Castelo",
+      "pais": "Portugal",
+      "telefones": [
+        "251410100"
+      ],
+      "telemoveis": [],
+      "satelite": [],
+      "faxes": [],
+      "emails": [
+        "geral@cm-melgaco.pt"
+      ],
+      "website": "",
+      "notas": "",
+      "dataCriacao": "2026-07-26"
+    },
+    {
+      "id": "ms1us33fhlgdt",
+      "sigla": "CM",
+      "codigoEntidade": "1604",
+      "tipoEntidade": "Camara Municipal",
+      "entidade": "Câmara Municipal de Monção",
+      "dataFundacao": "",
+      "anos": "",
+      "rua": "Largo de Camões",
+      "numero": "",
+      "andar": "",
+      "codigoPostal": "4950–440",
+      "localidade": "Monção",
+      "concelho": "Monção",
+      "freguesia": "União das freguesias de Monção e Troviscoso",
+      "distrito": "Viana do Castelo",
+      "pais": "Portugal",
+      "telefones": [
+        "251649000"
+      ],
+      "telemoveis": [],
+      "satelite": [],
+      "faxes": [],
+      "emails": [
+        "gap@cm-moncao.pt"
+      ],
+      "website": "",
+      "notas": "",
+      "dataCriacao": "2026-07-26"
+    },
+    {
+      "id": "ms1us33f0go6l",
+      "sigla": "CM",
+      "codigoEntidade": "1605",
+      "tipoEntidade": "Camara Municipal",
+      "entidade": "Câmara Municipal de Paredes De Coura",
+      "dataFundacao": "",
+      "anos": "",
+      "rua": "Largo Visconde de Mozelos, Ap.6",
+      "numero": "",
+      "andar": "",
+      "codigoPostal": "4941-909",
+      "localidade": "Paredes de Coura",
+      "concelho": "Paredes de Coura",
+      "freguesia": "União das freguesias de Paredes de Coura e Resende",
+      "distrito": "Viana do Castelo",
+      "pais": "Portugal",
+      "telefones": [
+        "251780100"
+      ],
+      "telemoveis": [],
+      "satelite": [],
+      "faxes": [],
+      "emails": [
+        "geral@paredesdecoura.pt"
+      ],
+      "website": "",
+      "notas": "",
+      "dataCriacao": "2026-07-26"
+    },
+    {
+      "id": "ms1us33f3cuwd",
+      "sigla": "CM",
+      "codigoEntidade": "1606",
+      "tipoEntidade": "Camara Municipal",
+      "entidade": "Câmara Municipal de Ponte Da Barca",
+      "dataFundacao": "",
+      "anos": "",
+      "rua": "Praça Dr. António Lacerda",
+      "numero": "",
+      "andar": "",
+      "codigoPostal": "4980-620",
+      "localidade": "Ponte da Barca",
+      "concelho": "Ponte da Barca",
+      "freguesia": "União das freguesias de Ponte da Barca, Vila Nova de Muía e Paço Vedro de Magalhães",
+      "distrito": "Viana do Castelo",
+      "pais": "Portugal",
+      "telefones": [
+        "258480180"
+      ],
+      "telemoveis": [],
+      "satelite": [],
+      "faxes": [],
+      "emails": [
+        "geral@cmpb.pt"
+      ],
+      "website": "",
+      "notas": "",
+      "dataCriacao": "2026-07-26"
+    },
+    {
+      "id": "ms1us33fwv22h",
+      "sigla": "CM",
+      "codigoEntidade": "1607",
+      "tipoEntidade": "Camara Municipal",
+      "entidade": "Câmara Municipal de Ponte De Lima",
+      "dataFundacao": "",
+      "anos": "",
+      "rua": "Praça da República",
+      "numero": "",
+      "andar": "",
+      "codigoPostal": "4990-062",
+      "localidade": "Ponte de Lima",
+      "concelho": "Ponte de Lima",
+      "freguesia": "Arca e Ponte de Lima",
+      "distrito": "Viana do Castelo",
+      "pais": "Portugal",
+      "telefones": [
+        "258900400"
+      ],
+      "telemoveis": [],
+      "satelite": [],
+      "faxes": [],
+      "emails": [
+        "geral@cm-pontedelima.pt"
+      ],
+      "website": "",
+      "notas": "",
+      "dataCriacao": "2026-07-26"
+    },
+    {
+      "id": "ms1us33fdg718",
+      "sigla": "CM",
+      "codigoEntidade": "1608",
+      "tipoEntidade": "Camara Municipal",
+      "entidade": "Câmara Municipal de Valença",
+      "dataFundacao": "",
+      "anos": "",
+      "rua": "Praça da República",
+      "numero": "",
+      "andar": "",
+      "codigoPostal": "4930-702",
+      "localidade": "Valença",
+      "concelho": "Valença",
+      "freguesia": "União das freguesias de Valença, Cristelo Covo e Arão",
+      "distrito": "Viana do Castelo",
+      "pais": "Portugal",
+      "telefones": [
+        "251809500"
+      ],
+      "telemoveis": [],
+      "satelite": [],
+      "faxes": [],
+      "emails": [
+        "geral@cm-valenca.pt"
+      ],
+      "website": "",
+      "notas": "",
+      "dataCriacao": "2026-07-26"
+    },
+    {
+      "id": "ms1us33fizhfc",
+      "sigla": "CM",
+      "codigoEntidade": "1609",
+      "tipoEntidade": "Camara Municipal",
+      "entidade": "Câmara Municipal de Viana Do Castelo",
+      "dataFundacao": "",
+      "anos": "",
+      "rua": "Passeio das Mordomas da Romaria",
+      "numero": "",
+      "andar": "",
+      "codigoPostal": "4904-877",
+      "localidade": "Viana do Castelo",
+      "concelho": "Viana do Castelo",
+      "freguesia": "União das freguesias de Viana do Castelo (Santa Maria Maior e Monserrate) e Meadela",
+      "distrito": "Viana do Castelo",
+      "pais": "Portugal",
+      "telefones": [
+        "258809300"
+      ],
+      "telemoveis": [],
+      "satelite": [],
+      "faxes": [],
+      "emails": [
+        "cmviana@cm-viana-castelo.pt"
+      ],
+      "website": "",
+      "notas": "",
+      "dataCriacao": "2026-07-26"
+    },
+    {
+      "id": "ms1us33fq048r",
+      "sigla": "CM",
+      "codigoEntidade": "1610",
+      "tipoEntidade": "Camara Municipal",
+      "entidade": "Câmara Municipal de Vila Nova De Cerveira",
+      "dataFundacao": "",
+      "anos": "",
+      "rua": "Praça do Município",
+      "numero": "",
+      "andar": "",
+      "codigoPostal": "4920-284",
+      "localidade": "Vila Nova de Cerveira",
+      "concelho": "Vila Nova de Cerveira",
+      "freguesia": "União das freguesias de Vila Nova de Cerveira e Lovelhe",
+      "distrito": "Viana do Castelo",
+      "pais": "Portugal",
+      "telefones": [
+        "251708020"
+      ],
+      "telemoveis": [],
+      "satelite": [],
+      "faxes": [],
+      "emails": [
+        "geral@cm-vncerveira.pt"
+      ],
+      "website": "",
+      "notas": "",
+      "dataCriacao": "2026-07-26"
+    }
+  ],
+  "acessos": [
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "30/07/2026 01:19:12"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "30/07/2026 01:19:12"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "29/07/2026 22:38:04"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "29/07/2026 22:38:04"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "29/07/2026 18:01:11"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "29/07/2026 18:01:11"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "29/07/2026 17:28:30"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "29/07/2026 17:28:30"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "28/07/2026 14:06:25"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "28/07/2026 14:06:25"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "28/07/2026 12:06:22"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "28/07/2026 12:06:22"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "28/07/2026 11:46:40"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "28/07/2026 11:46:40"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "28/07/2026 10:46:26"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "28/07/2026 10:46:26"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "27/07/2026 19:38:50"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "27/07/2026 19:38:50"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "27/07/2026 19:33:03"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "27/07/2026 19:33:03"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "27/07/2026 13:03:05"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "27/07/2026 13:03:05"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "27/07/2026 12:54:23"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "27/07/2026 12:54:23"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "27/07/2026 10:20:35"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "27/07/2026 10:20:35"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 23:17:58"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 23:17:58"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 21:27:40"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 12:08:17"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 12:08:17"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 11:59:24"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 11:59:24"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 11:57:51"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 11:57:51"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 11:55:47"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 11:55:47"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 11:38:10"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 11:38:10"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 11:08:54"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 11:08:54"
+    },
+    {
+      "username": "Monteiro",
+      "email": "afonsotropa473@gmail.com",
+      "datetime": "26/07/2026 11:08:25"
+    },
+    {
+      "username": "Monteiro",
+      "email": "afonsotropa473@gmail.com",
+      "datetime": "26/07/2026 11:08:25"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 10:17:20"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 10:17:20"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 09:45:35"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 09:45:35"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 09:36:50"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "26/07/2026 09:36:50"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 16:47:49"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 16:47:49"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 16:42:34"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 16:42:34"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 16:36:22"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 16:36:22"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 16:35:57"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 16:35:57"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 16:35:33"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 16:35:33"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 15:31:45"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 15:31:45"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 15:27:43"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 15:27:43"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 14:11:17"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 14:11:17"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 12:04:01"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 12:04:01"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 12:00:57"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "25/07/2026 12:00:57"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "24/07/2026 02:30:14"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "24/07/2026 02:30:14"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "24/07/2026 00:19:29"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "24/07/2026 00:19:29"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "24/07/2026 00:05:04"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "24/07/2026 00:05:04"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "24/07/2026 00:01:20"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "24/07/2026 00:01:20"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 23:45:35"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 23:45:35"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 23:43:15"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 23:43:15"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 21:43:51"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 21:43:51"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 21:35:55"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 21:35:55"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 21:31:08"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 21:31:08"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 20:53:55"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 20:53:55"
+    },
+    {
+      "username": "Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 20:30:13"
+    },
+    {
+      "username": "Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 20:30:13"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 20:27:04"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 20:27:04"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 20:08:34"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 20:08:34"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 19:13:15"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 19:13:15"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:53:19"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:52:48"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:48:34"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:48:33"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:48:33"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:48:31"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:39:43"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:39:41"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:34:43"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:34:42"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:34:42"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:34:41"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:34:39"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:33:22"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:33:21"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:33:21"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:33:20"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:33:18"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:31:25"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:31:25"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:12:11"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:06:35"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:05:01"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 18:01:36"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 17:58:51"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 17:38:41"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 17:38:41"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 17:14:10"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "23/07/2026 17:14:10"
+    },
+    {
+      "username": "Monteiro",
+      "email": "afonsotropa473@gmail.com",
+      "datetime": "22/07/2026 21:42:47"
+    },
+    {
+      "username": "Monteiro",
+      "email": "afonsotropa473@gmail.com",
+      "datetime": "22/07/2026 21:42:47"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "22/07/2026 21:42:29"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "22/07/2026 21:42:29"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "22/07/2026 15:31:52"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "22/07/2026 15:31:52"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "22/07/2026 07:03:49"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "22/07/2026 07:03:49"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "22/07/2026 04:41:21"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "22/07/2026 04:41:21"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "22/07/2026 03:41:46"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "22/07/2026 03:41:46"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 23:41:34"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 22:54:38"
+    },
+    {
+      "username": "Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 22:54:19"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 21:15:16"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 20:26:21"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 20:10:47"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 18:35:08"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 17:38:17"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 17:37:25"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 17:34:41"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 17:33:30"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 17:31:58"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 17:31:06"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 17:28:06"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 17:23:21"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 17:11:02"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 17:10:22"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 17:09:33"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 17:06:59"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 17:06:33"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 17:05:30"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 17:03:43"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 17:01:52"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 16:58:40"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 16:56:41"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 16:55:20"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 16:52:14"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 16:51:37"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 16:50:59"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 16:50:14"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 16:49:50"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 16:41:16"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 16:40:06"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 16:39:37"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 16:32:58"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 16:32:30"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 16:30:41"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 16:30:02"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 16:03:11"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 15:59:26"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 15:55:59"
+    },
+    {
+      "username": "Monteiro",
+      "email": "afonsotropa473@gmail.com",
+      "datetime": "21/07/2026 14:59:03"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 14:53:01"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "21/07/2026 14:51:13"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "19/07/2026 13:00:26"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "19/07/2026 12:51:36"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "19/07/2026 11:45:44"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "19/07/2026 11:44:52"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "19/07/2026 11:23:22"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "19/07/2026 11:21:49"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "19/07/2026 11:20:02"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "19/07/2026 10:26:21"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "19/07/2026 09:20:22"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "19/07/2026 08:37:34"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "19/07/2026 08:31:18"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "19/07/2026 02:12:59"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "19/07/2026 02:11:19"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "19/07/2026 02:10:21"
+    },
+    {
+      "username": "Admin.Alvaro",
+      "email": "alv.monteiro@gmail.com",
+      "datetime": "19/07/2026 02:06:28"
+    }
+  ],
+  "grupos": [
+    {
+      "id": "mrqv7d0clpzh6",
+      "nome": "Bombeiros",
+      "descricao": "Contactos de Bombeiros",
+      "cor": "#e74c3c",
+      "tipo": "Urgencia",
+      "contactos": [],
+      "dataCriacao": "2024-01-01"
+    },
+    {
+      "nome": "Comando",
+      "descricao": "Corpos de Bombeiros",
+      "cor": "#3498db",
+      "tipo": "Departamento",
+      "id": "mrr3ju2lbhuik",
+      "contactos": [],
+      "dataCriacao": "2026-07-19"
+    },
+    {
+      "nome": "Presidentes de Câmara",
+      "descricao": "",
+      "cor": "#e74c3c",
+      "tipo": "Departamento",
+      "id": "mrvilkkfrx4xo",
+      "contactos": [
+        "mrvhrf73863ob",
+        "mrvhrf7387qv2",
+        "mrvhrf7364eli",
+        "mrvhrf73elen3",
+        "mrvhrf73306l1",
+        "mrvhrf737ww86",
+        "mrvhrf73n0kw9",
+        "mrvhrf736ssf6",
+        "mrvhrf733jwfo",
+        "mrvhrf732y1k3"
+      ],
+      "dataCriacao": "2026-07-22"
+    }
+  ],
+  "tiposEntidade": [
+    {
+      "tipo": "Camara Municipal",
+      "sigla": "CM",
+      "departamentos": [
+        {
+          "nome": "Gabinete do Presidente",
+          "sigla": "GP",
+          "cargos": [
+            {
+              "nome": "Presidente",
+              "sigla": "Pres"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tipo": "Junta de Freguesia",
+      "sigla": "JF"
+    },
+    {
+      "tipo": "Bombeiros Voluntários / Sapadores",
+      "sigla": "CBV",
+      "departamentos": [
+        {
+          "nome": "Comando",
+          "sigla": "CMD",
+          "cargos": [
+            {
+              "nome": "Comandante",
+              "sigla": "CMDT"
+            },
+            {
+              "nome": "2º Cmandante",
+              "sigla": "2º CMDT"
+            },
+            {
+              "nome": "Adjunto de Comando",
+              "sigla": "ADJ CMD"
+            }
+          ]
+        },
+        {
+          "nome": "Direção",
+          "sigla": "DIR",
+          "cargos": [
+            {
+              "nome": "Presidente",
+              "sigla": "Pre"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tipo": "Autoridade",
+      "sigla": "AUT"
+    },
+    {
+      "tipo": "Instituicao de Ensino",
+      "sigla": "IE"
+    },
+    {
+      "tipo": "Hospital / Centro de Saude",
+      "sigla": "H/CS"
+    },
+    {
+      "tipo": "Empresa Publica",
+      "sigla": "EP"
+    },
+    {
+      "tipo": "IPSS",
+      "sigla": "IPSS"
+    },
+    {
+      "tipo": "Associacao",
+      "sigla": "ASS"
+    },
+    {
+      "tipo": "Fundacao",
+      "sigla": "FUN"
+    },
+    {
+      "tipo": "Cooperativa",
+      "sigla": "COOP"
+    },
+    {
+      "tipo": "Orgãos de comunicação",
+      "sigla": "OC"
+    }
+  ],
+  "outrasEntidades": []
+}

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda de Contactos</title>
+    <base href="./">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            background: #f0f0f0;
+            overflow-y: scroll;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png");
+            background-size: 150px;
+            background-repeat: repeat;
+            opacity: 0.08;
+            z-index: 0;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 50px;
+        }
+        .header h1 {
+            color: #003087;
+            font-size: 42px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .header p {
+            color: #003087;
+            font-size: 18px;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            width: 100%;
+        }
+        .card {
+            background: white;
+            padding: 35px 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-top: 5px solid #003087;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(0,48,135,0.08) 0%, rgba(0,48,135,0.02) 100%);
+            border-radius: 0 0 50% 50%;
+        }
+        .card-icon {
+            font-size: 55px;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+            width: 90px;
+            height: 90px;
+            line-height: 90px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .card h2 {
+            color: #000;
+            font-size: 20px;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+        .card p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            position: relative;
+            z-index: 1;
+        }
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+        }
+        .footer a {
+            color: #003087;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .footer a:hover {
+            color: #003087;
+        }
+        .last-update-badge {
+            position: relative;
+            background: rgba(0, 100, 0, 0.18);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 100, 0, 0.35);
+            border-radius: 20px;
+            padding: 5px 14px;
+            font-size: 16px;
+            color: #006400;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+            letter-spacing: 0.3px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            z-index: 1000;
+            user-select: none;
+            pointer-events: none;
+            text-align: center;
+        }
+        .last-update-badge span.label { opacity: 0.8; font-size: 16px; }
+        .last-update-badge span.date { font-weight: 600; margin-left: 4px; display: block; font-size: 15px; }
+        .last-update-badge span.time { font-weight: 600; display: block; font-size: 15px; }
+        .card:nth-child(1) { border-top-color: #E31B23; }
+        .card:nth-child(2) { border-top-color: #27AE60; }
+        .card:nth-child(3) { border-top-color: #F39C12; }
+        .card:nth-child(4) { border-top-color: #8E44AD; }
+        .card:nth-child(5) { border-top-color: #2980B9; }
+        .card:nth-child(6) { border-top-color: #16A085; }
+        .card:nth-child(7) { border-top-color: #D35400; }
+        .card:nth-child(8) { border-top-color: #2C3E50; }
+        .card:nth-child(9) { border-top-color: #C0392B; }
+        .card:nth-child(10) { border-top-color: #7F8C8D; }
+        .card:nth-child(11) { border-top-color: #1ABC9C; }
+        .card:nth-child(12) { border-top-color: #9B59B6; }
+        @media (max-width: 600px) {
+            .header h1 { font-size: 28px; }
+            .dashboard { grid-template-columns: 1fr; }
+        }
+        .user-header {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        .header-right .card {
+            position: relative;
+            z-index: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #000;
+        }
+
+        .user-role {
+            background: linear-gradient(135deg, #D35400 0%, #E67E22 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .entrar-card {
+            background: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            color: #003087;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-top: 4px solid #E31B23;
+            position: relative;
+            z-index: 10;
+        }
+        .entrar-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+        }
+        .entrar-card .entrar-icon {
+            font-size: 22px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <div class="header-left">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png" alt="ANEPC" style="width:120px;height:120px;object-fit:contain;">
+            <div style="line-height:1.2;">
+                <div style="font-size:20px;font-weight:600;color:#000;">AUTORIDADE NACIONAL DE EMERGÊNCIA E PROTEÇÃO CIVIL</div>
+                <div style="font-size:18px;font-weight:600;color:#000;">Comando Sub-Regional de Emergência e Proteção Civil Alto Minho</div>
+                <div style="font-size:16px;font-weight:700;color:#000;margin-top:4px;">LISTA TELEFÓNICA Comando Sub-Regional</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <a href="login.html" class="entrar-card">
+                <span class="entrar-icon">&#128274;</span>
+                Entrar
+            </a>
+        </div>
+    </div>
+    <div class="last-update-badge">
+        <span class="label">Última atualização:</span>
+        <span class="date" id="backupDate">--</span>
+        <span class="time" id="backupTime">--</span>
+    </div>
+
+    <div class="header">
+        <h1>Agenda de Contactos</h1>
+        <p>Sistema de gestão de contactos e entidades</p>
+    </div>
+
+    <div class="dashboard">
+        <a href="login.html" class="card">
+            <div class="card-icon">&#128274;</div>
+            <h2>Login</h2>
+            <p>Aceder a conta existente</p>
+        </a>
+
+        <a href="registar.html" class="card">
+            <div class="card-icon">&#128221;</div>
+            <h2>Registar</h2>
+            <p>Criar uma nova conta</p>
+        </a>
+
+        <a href="recuperar-senha.html" class="card">
+            <div class="card-icon">&#128273;</div>
+            <h2>Recuperar Palavra-passe</h2>
+            <p>Recuperar palavra-passe esquecida</p>
+        </a>
+
+        <a href="admin.html" class="card">
+            <div class="card-icon">&#128736;</div>
+            <h2>Painel Admin</h2>
+            <p>Painel de administração</p>
+        </a>
+
+        <a href="contactos.html" class="card">
+            <div class="card-icon">&#128100;</div>
+            <h2>Contactos</h2>
+            <p>Lista de contactos das entidades</p>
+        </a>
+
+        <a href="grupos_contacto.html" class="card">
+            <div class="card-icon">&#128101;</div>
+            <h2>Grupos</h2>
+            <p>Gerir grupos de contacto</p>
+        </a>
+
+        <a href="utilizadores.html" class="card">
+            <div class="card-icon">&#128101;</div>
+            <h2>Utilizadores</h2>
+            <p>Gerir utilizadores registados</p>
+        </a>
+
+        <a href="acessos.html" class="card">
+            <div class="card-icon">&#128202;</div>
+            <h2>Acessos</h2>
+            <p>Ver registo de acessos</p>
+        </a>
+
+        <a href="permissoes.html" class="card">
+            <div class="card-icon">&#128272;</div>
+            <h2>Permissões</h2>
+            <p>Gerir permissões dos utilizadores</p>
+        </a>
+
+        <a href="lista_contactos.html" class="card">
+            <div class="card-icon">&#128196;</div>
+            <h2>Lista de Contactos</h2>
+            <p>Visualizar contactos</p>
+        </a>
+
+        <a href="exportar_contactos.html" class="card">
+            <div class="card-icon">&#128228;</div>
+            <h2>Exportar Contactos</h2>
+            <p>Exportar dados de contactos</p>
+        </a>
+
+        <a href="tipos_entidades.html" class="card">
+            <div class="card-icon">&#128194;</div>
+            <h2>Tipos de Entidade</h2>
+            <p>Gerir tipos de entidade</p>
+        </a>
+    </div>
+
+    <div class="footer">
+    </div>
+    <div class="user-header" id="userHeader"></div>
+    <script>
+        function loadBackupInfo() {
+            var lastBackup = localStorage.getItem('lastBackup');
+            if (lastBackup) {
+                var backup = JSON.parse(lastBackup);
+                var dateEl = document.getElementById('backupDate');
+                var timeEl = document.getElementById('backupTime');
+                if (backup.data) {
+                    var parts = backup.data.split('-');
+                    dateEl.textContent = parts[2] + '/' + parts[1] + '/' + parts[0];
+                }
+                if (backup.hora) {
+                    var timeParts = backup.hora.split(':');
+                    timeEl.textContent = timeParts[0] + ':' + timeParts[1];
+                }
+            }
+        }
+        loadBackupInfo();
+    </script>
+    <script>
+        var user = getCurrentUser();
+        if (user) {
+            document.getElementById('userHeader').innerHTML =
+                '<span class="user-name">' + user.username + '</span>' +
+                '<span class="user-role">' + user.role + '</span>';
+        }
+    </script>
+</body>
+</html>

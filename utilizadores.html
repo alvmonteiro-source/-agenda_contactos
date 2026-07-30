@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerir Utilizadores</title>
+    <base href="./">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif; min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; position: relative; background: #f0f0f0; overflow-y: scroll; }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png");
+            background-size: 150px;
+            background-repeat: repeat;
+            opacity: 0.08;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+        .container { max-width: 100%; margin: 0 auto; }
+        h1 { color: #000; text-align: center; margin-bottom: 40px; font-size: 32px; }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 8px 15px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e1e8ed;
+            flex-shrink: 0;
+        }
+
+        .nav-links a {
+            color: #000;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+            background: rgba(255,255,255,0.7);
+        }
+
+        .nav-links a:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0,0,0,0.15); }
+        .nav-links a.active { background: #2c3e50; color: #fff; }
+
+        .section {
+            background: white; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); overflow: hidden;
+            position: relative; z-index: 1; display: flex; flex-direction: column;
+        }
+        .section h2 {
+            color: #E67E22; font-size: 22px; border-bottom: 2px solid #E67E22; padding: 20px 30px 10px;
+        }
+
+        .toolbar { display: flex; gap: 10px; padding: 20px 30px; background: #f8f9fa; border-bottom: 1px solid #e1e8ed; flex-wrap: wrap; align-items: center; }
+        .search-box { flex: 1; min-width: 200px; }
+        .search-box input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif; transition: all 0.2s; background: white; }
+        .search-box input:focus { outline: none; border-color: #E67E22; box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1); }
+        button { padding: 10px 20px; border: none; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        button:active { transform: scale(0.98); }
+        .btn-primary { background: #E67E22; color: white; }
+        .btn-primary:hover { background: #D35400; }
+        .btn-secondary { background: #95a5a6; color: white; }
+        .btn-secondary:hover { background: #7f8c8d; }
+        .btn-success { background: #27ae60; color: white; }
+        .btn-success:hover { background: #219a52; }
+        .btn-danger { background: #CB4335; color: white; }
+        .btn-danger:hover { background: #a93226; }
+        .btn-info { background: #2980b9; color: white; }
+        .btn-info:hover { background: #2471a3; }
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+        .stats { display: flex; gap: 20px; padding: 15px 30px; background: #f8f9fa; border-bottom: 1px solid #e1e8ed; font-size: 13px; color: #666; }
+        .stats span { font-weight: 600; color: #2c3e50; }
+        .table-container { overflow-x: auto; overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        thead { background: #003366; position: sticky; top: 0; z-index: 10; }
+        thead th { color: white; padding: 12px 15px; text-align: left; font-size: 13px; font-weight: 600; white-space: nowrap; background: #003366; }
+        tbody tr { border-bottom: 1px solid #eee; transition: background 0.15s; }
+        tbody tr:hover { background: #f0f7ff; }
+        tbody td { padding: 12px 15px; font-size: 13px; vertical-align: middle; }
+        .actions-cell { white-space: nowrap; }
+        .actions-cell button { margin-right: 4px; }
+
+        .status-badge {
+            display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;
+        }
+        .status-active { background: #d4edda; color: #155724; }
+        .status-inactive { background: #f8d7da; color: #721c24; }
+        .role-badge {
+            display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;
+        }
+        .role-admin { background: #E67E22; color: white; }
+        .role-user { background: #27ae60; color: white; }
+        .role-viewer { background: #95a5a6; color: white; }
+
+        .empty-state { text-align: center; padding: 60px 30px; color: #999; }
+        .empty-state .icon { font-size: 48px; margin-bottom: 15px; }
+        .empty-state h3 { font-size: 18px; color: #666; margin-bottom: 8px; }
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; justify-content: center; align-items: center; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: white; border-radius: 8px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .modal-header { background: linear-gradient(135deg, #D35400 0%, #E67E22 100%); color: white; padding: 20px 25px; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h2 { font-size: 18px; font-weight: 600; }
+        .modal-close { background: none; color: white; font-size: 24px; padding: 0; min-width: auto; line-height: 1; }
+        .modal-close:hover { opacity: 0.8; background: none; }
+        .modal-body { padding: 25px; }
+        .form-row { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 15px; }
+        .form-row.two-col { grid-template-columns: 1fr 1fr; }
+        .form-group { display: flex; flex-direction: column; }
+        label { font-size: 13px; font-weight: 500; color: #555; margin-bottom: 5px; }
+        .required::after { content: " *"; color: #e74c3c; }
+        input, select { padding: 9px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif; transition: all 0.2s; background: white; }
+        input:focus, select:focus { outline: none; border-color: #E67E22; box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1); }
+        .modal-footer { padding: 15px 25px; background: #f8f9fa; border-top: 1px solid #e1e8ed; display: flex; justify-content: flex-end; gap: 10px; border-radius: 0 0 8px 8px; }
+
+        .toast { position: fixed; bottom: 30px; right: 30px; padding: 12px 20px; border-radius: 6px; color: white; font-size: 14px; font-weight: 500; z-index: 2000; opacity: 0; transform: translateY(20px); transition: all 0.3s; }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success { background: #27ae60; }
+        .toast.error { background: #e74c3c; }
+
+        @media (max-width: 768px) {
+            .toolbar { flex-direction: column; }
+            .stats { flex-wrap: wrap; gap: 10px; }
+            thead th, tbody td { padding: 8px 10px; font-size: 12px; }
+            .btn-sm { padding: 5px 8px; font-size: 11px; }
+            .form-row.two-col { grid-template-columns: 1fr; }
+        }
+        .user-header {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        .header-right .card {
+            position: relative;
+            z-index: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #000;
+        }
+
+        .user-role {
+            background: linear-gradient(135deg, #D35400 0%, #E67E22 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        @media print {
+            .toolbar, .actions-cell, .nav-links, #btnSairBottom { display: none !important; }
+            thead { background: #E67E22 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+        .main-wrapper { display: flex; align-items: flex-start; gap: 0; max-width: 100%; margin: 0 auto; width: 100%; position: relative; z-index: 1; }
+        .main-wrapper .container { flex: 1; min-width: 0; margin: 0; padding: 0; }
+        .bottom-actions { display: flex; flex-direction: column; gap: 12px; padding: 10px 20px 30px 15px; align-items: flex-start; min-width: 220px; flex-shrink: 0; width: 320px; }
+        .bottom-actions .card { width: 100%; }
+        .card {
+            background: white; padding: 12px 16px; border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: flex;
+            flex-direction: row; align-items: center; gap: 12px;
+            cursor: pointer; border: 1px solid #e1e8ed; color: #000;
+            font-family: inherit; font-size: inherit; text-align: left;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        .card .card-icon { font-size: 28px; }
+        .card .card-text h2 { color: #000; font-size: 14px; margin-bottom: 2px; }
+        .card .card-text p { color: #666; font-size: 11px; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <div class="header-left">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png" alt="ANEPC" style="width:120px;height:120px;object-fit:contain;">
+            <div style="line-height:1.2;">
+                <div style="font-size:20px;font-weight:600;color:#000;">AUTORIDADE NACIONAL DE EMERGÊNCIA E PROTEÇÃO CIVIL</div>
+                <div style="font-size:18px;font-weight:600;color:#000;">Comando Sub-Regional de Emergência e Proteção Civil Alto Minho</div>
+                <div style="font-size:16px;font-weight:700;color:#000;margin-top:4px;">LISTA TELEFÓNICA Comando Sub-Regional</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <button type="button" class="card" id="btnSairBottom" style="margin:0;padding:8px 14px;">
+                <div class="card-icon" style="font-size:20px;">&#128682;</div>
+                <div class="card-text">
+                    <h2>Sair</h2>
+                </div>
+            </button>
+            <div class="user-header" id="userHeader"></div>
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="bottom-actions">
+            <button type="button" class="card" id="btnNovoUtilizador">
+                <div class="card-icon">&#128100;</div>
+                <div class="card-text">
+                    <h2>Criar Novo Utilizador</h2>
+                    <p>Adicionar novo utilizador ao sistema</p>
+                </div>
+            </button>
+        </div>
+
+        <div class="container">
+
+        <h1 style="font-size:24px;color:#2c3e50;text-align:center;margin:10px 0 20px 0;">GERIR UTILIZADORES</h1>
+
+        <div class="section">
+            <div class="nav-links">
+                <a href="admin.html" onclick="safeNavigate(event, 'admin.html', 'painel')">Painel</a>
+                <a href="contactos.html" onclick="safeNavigate(event, 'contactos.html', 'contactos')">Contactos</a>
+                <a href="grupos_contacto.html" onclick="safeNavigate(event, 'grupos_contacto.html', 'contactos')">Grupos</a>
+                <a href="tipos_entidades.html" onclick="safeNavigate(event, 'tipos_entidades.html', 'contactos')">Tipos de Entidade</a>
+                <a href="acessos.html" onclick="safeNavigate(event, 'acessos.html', 'acessos')">Acessos</a>
+                <a href="permissoes.html" onclick="safeNavigate(event, 'permissoes.html', 'permissoes')">Permissões</a>
+                <a href="partilhar.html" onclick="safeNavigate(event, 'partilhar.html', 'partilhar')">Partilhar</a>
+            </div>
+            <div class="toolbar">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Pesquisar por nome ou email...">
+                </div>
+            </div>
+
+            <div class="stats">
+                <div>Total: <span id="totalCount">0</span> utilizadores</div>
+                <div>Ativos: <span id="activeCount">0</span></div>
+                <div>Inativos: <span id="inactiveCount">0</span></div>
+            </div>
+
+            <div class="table-container">
+                <table id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>Utilizador</th>
+                            <th>Email</th>
+                            <th>Função</th>
+                            <th>Estado</th>
+                            <th>Data de Registo</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+
+            <div class="empty-state" id="emptyState" style="display:none;">
+                <div class="icon">&#128101;</div>
+                <h3>Nenhum utilizador encontrado</h3>
+            </div>
+        </div>
+
+    </div>
+
+    </div>
+
+    <!-- Modal Novo/Editar Utilizador -->
+    <div class="modal-overlay" id="modalUser">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Novo Utilizador</h2>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formUser">
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label for="username" class="required">Utilizador</label>
+                            <input type="text" id="username" name="username" maxlength="50" placeholder="Nome de utilizador">
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="required">Email</label>
+                            <input type="email" id="email" name="email" maxlength="100" placeholder="email@exemplo.pt">
+                        </div>
+                    </div>
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label for="password" class="required">Palavra-passe</label>
+                            <input type="password" id="password" name="password" maxlength="50" placeholder="Mínimo 6 caracteres">
+                        </div>
+                        <div class="form-group">
+                            <label for="role" class="required">Função</label>
+                            <select id="role" name="role">
+                                <option value="user">Utilizador</option>
+                                <option value="admin">Administrador</option>
+                                <option value="viewer">Visualizador</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="status">Estado</label>
+                            <select id="status" name="status">
+                                <option value="active">Ativo</option>
+                                <option value="inactive">Inativo</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="btnCancelar">Cancelar</button>
+                <button class="btn-success" id="btnGuardar">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detalhes -->
+    <div class="modal-overlay" id="modalDetalhes">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Detalhes do Utilizador</h2>
+                <button class="modal-close" id="modalDetalhesClose">&times;</button>
+            </div>
+            <div class="modal-body" id="detalhesContent"></div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="btnFecharDetalhes">Fechar</button>
+                <button class="btn-info" id="btnEditarDetalhes">Editar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="permissions.js"></script>
+    <script src="init_data.js"></script>
+    <script>
+        (function() {
+            if (!isLoggedIn()) { window.location.href = 'login.html'; return; }
+            var user = getCurrentUser();
+            if (user) {
+                document.getElementById('userHeader').innerHTML =
+                    '<span class="user-name">' + user.username + '</span>' +
+                    '<span class="user-role">' + user.role + '</span>';
+            }
+            var userPerms = getPagePermissions('utilizadores');
+            if (!userPerms.includes('ver')) { alert('Não tem permissão para aceder a esta página.'); window.location.href = 'admin.html'; return; }
+
+            if (!userPerms.includes('criar')) {
+                var el = document.getElementById('btnNovoUtilizador'); if (el) el.style.display = 'none';
+            }
+
+            var btnSairBottom = document.getElementById('btnSairBottom');
+            if (btnSairBottom) btnSairBottom.addEventListener('click', function(e) {
+                e.preventDefault();
+                sessionStorage.removeItem('currentUser');
+                window.location.href = 'login.html';
+            });
+
+            var users = [];
+            var editingId = null;
+
+            function loadUsers() {
+                users = JSON.parse(localStorage.getItem('users')) || [];
+            }
+
+            function saveUsers() {
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+
+            function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
+
+            function showToast(message, type) {
+                var toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.className = 'toast ' + type + ' show';
+                setTimeout(function() { toast.classList.remove('show'); }, 3000);
+            }
+
+            function escapeHtml(text) {
+                if (!text) return '';
+                var div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function openModal(id) { document.getElementById(id).classList.add('active'); }
+            function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+            function render() {
+                var search = document.getElementById('searchInput').value.toLowerCase();
+                var filtered = users.filter(function(u) {
+                    return u.username.toLowerCase().indexOf(search) !== -1 ||
+                           (u.email && u.email.toLowerCase().indexOf(search) !== -1);
+                });
+
+                var tbody = document.getElementById('tableBody');
+                var emptyState = document.getElementById('emptyState');
+                var activeCount = users.filter(function(u) { return u.status === 'active'; }).length;
+                var inactiveCount = users.filter(function(u) { return u.status === 'inactive'; }).length;
+
+                document.getElementById('totalCount').textContent = users.length;
+                document.getElementById('activeCount').textContent = activeCount;
+                document.getElementById('inactiveCount').textContent = inactiveCount;
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = '';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+
+                emptyState.style.display = 'none';
+                var html = '';
+                filtered.forEach(function(u) {
+                    var statusClass = u.status === 'active' ? 'status-active' : 'status-inactive';
+                    var statusText = u.status === 'active' ? 'Ativo' : 'Inativo';
+                    var roleClass = 'role-' + (u.role || 'user');
+                    var roleText = u.role === 'admin' ? 'Admin' : u.role === 'viewer' ? 'Visualizador' : 'Utilizador';
+                    var canEdit = userPerms.includes('editar');
+                    var canDelete = userPerms.includes('apagar');
+                    var canToggle = userPerms.includes('ativar_desativar');
+
+                    html += '<tr>' +
+                        '<td><strong>' + escapeHtml(u.username) + '</strong></td>' +
+                        '<td>' + escapeHtml(u.email || '') + '</td>' +
+                        '<td><span class="role-badge ' + roleClass + '">' + roleText + '</span></td>' +
+                        '<td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>' +
+                        '<td>' + escapeHtml(u.dataRegisto || 'N/D') + '</td>' +
+                        '<td class="actions-cell">' +
+                            '<button class="btn-info btn-sm" onclick="viewUser(\'' + escapeHtml(u.username) + '\')">Ver</button>' +
+                            (canEdit ? '<button class="btn-primary btn-sm" onclick="editUser(\'' + escapeHtml(u.username) + '\')">Editar</button>' : '') +
+                            (canToggle ? '<button class="btn-success btn-sm" onclick="toggleStatus(\'' + escapeHtml(u.username) + '\')">' + (u.status === 'active' ? 'Desativar' : 'Ativar') + '</button>' : '') +
+                            (canDelete ? '<button class="btn-danger btn-sm" onclick="deleteUser(\'' + escapeHtml(u.username) + '\')">Apagar</button>' : '') +
+                        '</td>' +
+                    '</tr>';
+                });
+                tbody.innerHTML = html;
+            }
+
+            window.viewUser = function(username) {
+                var u = users.find(function(usr) { return usr.username === username; });
+                if (!u) return;
+                var roleText = u.role === 'admin' ? 'Administrador' : u.role === 'viewer' ? 'Visualizador' : 'Utilizador';
+                var statusText = u.status === 'active' ? 'Ativo' : 'Inativo';
+                var html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">' +
+                    '<div><label style="font-size:11px;text-transform:uppercase;color:#999;">Utilizador</label><p style="font-size:14px;color:#000;font-weight:600;">' + escapeHtml(u.username) + '</p></div>' +
+                    '<div><label style="font-size:11px;text-transform:uppercase;color:#999;">Email</label><p style="font-size:14px;color:#000;">' + escapeHtml(u.email || 'N/D') + '</p></div>' +
+                    (userPerms.includes('ver_senhas') ?                     '<div><label style="font-size:11px;text-transform:uppercase;color:#999;">Palavra-passe</label><p style="font-size:14px;color:#000;">' + escapeHtml(u.password || 'N/D') + '</p></div>' : '') +
+                    '<div><label style="font-size:11px;text-transform:uppercase;color:#999;">Função</label><p style="font-size:14px;color:#000;">' + roleText + '</p></div>' +
+                    '<div><label style="font-size:11px;text-transform:uppercase;color:#999;">Estado</label><p style="font-size:14px;color:#000;">' + statusText + '</p></div>' +
+                    '<div><label style="font-size:11px;text-transform:uppercase;color:#999;">Data de Registo</label><p style="font-size:14px;color:#000;">' + escapeHtml(u.dataRegisto || 'N/D') + '</p></div>' +
+                '</div>';
+                document.getElementById('detalhesContent').innerHTML = html;
+                openModal('modalDetalhes');
+            };
+
+            window.editUser = function(username) {
+                if (!userPerms.includes('editar')) { alert('Sem permissão.'); return; }
+                var u = users.find(function(usr) { return usr.username === username; });
+                if (!u) return;
+                editingId = username;
+                document.getElementById('modalTitle').textContent = 'Editar Utilizador';
+                document.getElementById('username').value = u.username;
+                document.getElementById('username').readOnly = true;
+                document.getElementById('email').value = u.email || '';
+                document.getElementById('password').value = '';
+                document.getElementById('password').placeholder = 'Deixe vazio para manter';
+                document.getElementById('role').value = u.role || 'user';
+                document.getElementById('status').value = u.status || 'active';
+                openModal('modalUser');
+            };
+
+            window.toggleStatus = function(username) {
+                if (!userPerms.includes('ativar_desativar')) { alert('Sem permissão.'); return; }
+                var u = users.find(function(usr) { return usr.username === username; });
+                if (!u) return;
+                u.status = u.status === 'active' ? 'inactive' : 'active';
+                saveUsers();
+                render();
+                showToast('Estado de ' + username + ' atualizado!', 'success');
+            };
+
+            window.deleteUser = function(username) {
+                if (!userPerms.includes('apagar')) { alert('Sem permissão.'); return; }
+                if (!confirm('Tem a certeza que deseja apagar o utilizador ' + username + '?')) return;
+                users = users.filter(function(u) { return u.username !== username; });
+                saveUsers();
+                render();
+                showToast('Utilizador apagado!', 'success');
+            };
+
+            document.getElementById('btnNovoUtilizador').addEventListener('click', function() {
+                editingId = null;
+                document.getElementById('modalTitle').textContent = 'Novo Utilizador';
+                document.getElementById('formUser').reset();
+                document.getElementById('username').readOnly = false;
+                document.getElementById('password').placeholder = 'Mínimo 6 caracteres';
+                openModal('modalUser');
+            });
+
+            document.getElementById('btnGuardar').addEventListener('click', function() {
+                var username = document.getElementById('username').value.trim();
+                var email = document.getElementById('email').value.trim();
+                var password = document.getElementById('password').value;
+                var role = document.getElementById('role').value;
+                var status = document.getElementById('status').value;
+
+                if (!username) { showToast('Insira o nome de utilizador', 'error'); return; }
+                if (!email) { showToast('Insira o email', 'error'); return; }
+                if (!editingId && password.length < 6) { showToast('A palavra-passe deve ter pelo menos 6 caracteres', 'error'); return; }
+                if (editingId && password && password.length < 6) { showToast('A palavra-passe deve ter pelo menos 6 caracteres', 'error'); return; }
+
+                if (editingId) {
+                    var u = users.find(function(usr) { return usr.username === editingId; });
+                    if (u) {
+                        u.email = email;
+                        if (password) u.password = password;
+                        u.role = role;
+                        u.status = status;
+                        if (role === 'admin') {
+                            u.pagePermissions = {
+                                painel: ['ver', 'ver_estatisticas'],
+                                utilizadores: ['ver', 'criar', 'editar', 'apagar', 'ativar_desativar', 'ver_senhas'],
+                                acessos: ['ver', 'exportar', 'limpar', 'ver_detalhes'],
+                                permissoes: ['ver', 'editar', 'gerir_funcoes', 'atribuir_todas'],
+                                contactos: ['ver', 'criar', 'criar_entidade', 'editar', 'apagar', 'importar', 'exportar', 'backup'],
+                                grupos: ['ver', 'criar', 'editar', 'apagar', 'gerir_contactos', 'enviar_email']
+                            };
+                        } else if (role === 'viewer') {
+                            u.pagePermissions = {
+                                painel: ['ver'],
+                                utilizadores: ['ver'],
+                                acessos: ['ver'],
+                                permissoes: [],
+                                contactos: ['ver'],
+                                grupos: ['ver']
+                            };
+                        } else {
+                            if (!u.pagePermissions) {
+                                u.pagePermissions = {
+                                    painel: ['ver'],
+                                    utilizadores: [],
+                                    acessos: [],
+                                    permissoes: [],
+                                    contactos: [],
+                                    grupos: []
+                                };
+                            }
+                        }
+                        if (u.username === getCurrentUser().username) {
+                            var cu = getCurrentUser();
+                            cu.role = u.role;
+                            cu.pagePermissions = u.pagePermissions;
+                            sessionStorage.setItem('currentUser', JSON.stringify(cu));
+                        }
+                    }
+                    showToast('Utilizador atualizado!', 'success');
+                } else {
+                    var exists = users.some(function(u) { return u.username.toLowerCase() === username.toLowerCase(); });
+                    if (exists) { showToast('Esse nome de utilizador já existe', 'error'); return; }
+                    users.push({
+                        username: username,
+                        email: email,
+                        password: password,
+                        status: status,
+                        role: role,
+                        dataRegisto: new Date().toLocaleDateString('pt-PT'),
+                        pagePermissions: role === 'admin' ? {
+                            painel: ['ver', 'ver_estatisticas'],
+                            utilizadores: ['ver', 'criar', 'editar', 'apagar', 'ativar_desativar', 'ver_senhas'],
+                            acessos: ['ver', 'exportar', 'limpar', 'ver_detalhes'],
+                            permissoes: ['ver', 'editar', 'gerir_funcoes', 'atribuir_todas'],
+                            contactos: ['ver', 'criar', 'criar_entidade', 'editar', 'apagar', 'importar', 'exportar', 'backup'],
+                            grupos: ['ver', 'criar', 'editar', 'apagar', 'gerir_contactos', 'enviar_email']
+                        } : {
+                            painel: ['ver'],
+                            utilizadores: [],
+                            acessos: [],
+                            permissoes: [],
+                            contactos: [],
+                            grupos: []
+                        }
+                    });
+                    showToast('Utilizador criado!', 'success');
+                }
+
+                saveUsers();
+                render();
+                closeModal('modalUser');
+            });
+
+            document.getElementById('modalClose').addEventListener('click', function() { closeModal('modalUser'); });
+            document.getElementById('btnCancelar').addEventListener('click', function() { closeModal('modalUser'); });
+            document.getElementById('modalDetalhesClose').addEventListener('click', function() { closeModal('modalDetalhes'); });
+            document.getElementById('btnFecharDetalhes').addEventListener('click', function() { closeModal('modalDetalhes'); });
+            document.getElementById('btnEditarDetalhes').addEventListener('click', function() {
+                closeModal('modalDetalhes');
+            });
+
+            document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+                overlay.addEventListener('click', function(e) {
+                    if (e.target === overlay) overlay.classList.remove('active');
+                });
+            });
+
+            document.getElementById('searchInput').addEventListener('input', render);
+
+            function checkBackupPermission() {
+                var cu = getCurrentUser();
+                var freshUsers = JSON.parse(localStorage.getItem('users')) || [];
+                var freshUser = freshUsers.find(function(u) { return u.username === cu.username; });
+            }
+
+            document.getElementById('searchInput').addEventListener('input', render);
+
+            loadDadosFromJSON(function() {
+                loadUsers();
+                render();
+                checkBackupPermission();
+            });
+        })();
+    </script>
+</body>
+</html>

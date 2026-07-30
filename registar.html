@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registar</title>
+    <base href="./">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: #f0f0f0;
+            overflow-y: scroll;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png");
+            background-size: 150px;
+            background-repeat: repeat;
+            opacity: 0.08;
+            z-index: 0;
+        }
+
+        body > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            padding-top: 200px;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #000;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #000;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 6px;
+            font-size: 16px;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #E67E22;
+            box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group.error input {
+            border-color: #e74c3c;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #D35400 0%, #E67E22 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(230, 126, 34, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #E67E22;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 50px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 35px;
+            color: #666;
+            padding: 5px;
+        }
+
+        .toggle-password:hover {
+            color: #E67E22;
+        }
+
+        .eye-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .eye-wrapper.hidden::after {
+            content: '';
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            width: 3px;
+            height: 35px;
+            background: #666;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            transform-origin: center;
+        }
+    </style>
+</head>
+<body>
+    <div style="position:fixed;top:15px;left:20px;z-index:9999;display:flex;align-items:center;gap:10px;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png" alt="ANEPC" style="width:150px;height:150px;object-fit:contain;">
+        <div style="line-height:1.2;">
+            <div style="font-size:20px;font-weight:600;color:#000;">AUTORIDADE NACIONAL DE EMERGÊNCIA E PROTEÇÃO CIVIL</div>
+            <div style="font-size:18px;font-weight:600;color:#000;">Comando Sub-Regional de Emergência e Proteção Civil Alto Minho</div>
+            <div style="font-size:16px;font-weight:700;color:#000;margin-top:4px;">LISTA TELEFÓNICA Comando Sub-Regional</div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="header">
+            <h1>Criar Conta</h1>
+            <p>Preencha os dados para se registar</p>
+            <p style="color: #E67E22; font-size: 12px; margin-top: 10px;">A conta será ativada pelo administrador</p>
+        </div>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="username">Utilizador</label>
+                <input type="text" id="username" name="username" placeholder="O seu nome de utilizador" required>
+                <span class="error-message">Por favor, insira o nome de utilizador</span>
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" placeholder="email@exemplo.com" required>
+                <span class="error-message">Por favor, insira um e-mail válido</span>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Palavra-passe</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" name="password" placeholder="A sua palavra-passe" required>
+                    <button type="button" class="toggle-password" onclick="togglePassword('password')">
+                        <span class="eye-wrapper hidden">&#128065;</span>
+                    </button>
+                </div>
+                <span class="error-message">A palavra-passe deve ter pelo menos 6 caracteres</span>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirmar Palavra-passe</label>
+                <div class="password-wrapper">
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirme a sua palavra-passe" required>
+                    <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">
+                        <span class="eye-wrapper hidden">&#128065;</span>
+                    </button>
+                </div>
+                <span class="error-message">As palavras-passe não coincidem</span>
+            </div>
+
+            <button type="submit" class="btn">Registar</button>
+        </form>
+
+        <a href="login.html" class="back-link">&larr; Voltar ao Login</a>
+    </div>
+
+    <script src="init_data.js"></script>
+    <script>
+        // Initialize localStorage with default users if empty
+        function initUsers() {
+            if (!localStorage.getItem('users')) {
+                const defaultUsers = [
+                    { username: 'joao_silva', email: 'joao@email.com', password: '123456', status: 'active' },
+                    { username: 'maria_santos', email: 'maria@email.com', password: '123456', status: 'active' },
+                    { username: 'pedro_costa', email: 'pedro@email.com', password: '123456', status: 'inactive' },
+                    { username: 'ana_oliveira', email: 'ana@email.com', password: '123456', status: 'active' }
+                ];
+                localStorage.setItem('users', JSON.stringify(defaultUsers));
+            }
+        }
+
+        // Get users from localStorage
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('users')) || [];
+        }
+
+        // Save users to localStorage
+        function saveUsers(users) {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        // Add access log entry
+        function addAccessLog(username, email) {
+            const accessLog = JSON.parse(localStorage.getItem('accessLog')) || [];
+            const now = new Date();
+            const datetime = now.toLocaleDateString('pt-PT') + ' ' + now.toLocaleTimeString('pt-PT');
+            
+            accessLog.unshift({ username, email, datetime });
+            localStorage.setItem('accessLog', JSON.stringify(accessLog));
+        }
+
+        const form = document.getElementById('registerForm');
+        const usernameInput = document.getElementById('username');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+
+            const users = getUsers();
+
+            // Validate username
+            if (usernameInput.value.trim() === '') {
+                usernameInput.parentElement.classList.add('error');
+                usernameInput.parentElement.querySelector('.error-message').textContent = 'Por favor, insira o nome de utilizador';
+                isValid = false;
+            } else {
+                // Check for duplicate username
+                const duplicate = users.some(u => 
+                    u.username.toLowerCase() === usernameInput.value.trim().toLowerCase()
+                );
+                if (duplicate) {
+                    usernameInput.parentElement.classList.add('error');
+                    usernameInput.parentElement.querySelector('.error-message').textContent = 'Este nome de utilizador já existe';
+                    isValid = false;
+                } else {
+                    usernameInput.parentElement.classList.remove('error');
+                }
+            }
+
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput.value)) {
+                emailInput.parentElement.classList.add('error');
+                emailInput.parentElement.querySelector('.error-message').textContent = 'Por favor, insira um e-mail válido';
+                isValid = false;
+            } else {
+                emailInput.parentElement.classList.remove('error');
+            }
+
+            // Validate password
+            if (passwordInput.value.length < 6) {
+                passwordInput.parentElement.parentElement.classList.add('error');
+                passwordInput.parentElement.parentElement.querySelector('.error-message').textContent = 'A palavra-passe deve ter pelo menos 6 caracteres';
+                isValid = false;
+            } else {
+                passwordInput.parentElement.parentElement.classList.remove('error');
+            }
+
+            // Validate password confirmation
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                confirmPasswordInput.parentElement.parentElement.classList.add('error');
+                confirmPasswordInput.parentElement.parentElement.querySelector('.error-message').textContent = 'As palavras-passe não coincidem';
+                isValid = false;
+            } else {
+                confirmPasswordInput.parentElement.parentElement.classList.remove('error');
+            }
+
+            if (isValid) {
+                const newUsername = usernameInput.value.trim();
+                const newEmail = emailInput.value.trim();
+
+                // Add new user to localStorage with inactive status and default permissions
+                users.push({
+                    username: newUsername,
+                    email: newEmail,
+                    password: passwordInput.value,
+                    status: 'inactive',
+                    role: 'user',
+                    pagePermissions: {
+                        painel: ['ver'],
+                        utilizadores: [],
+                        acessos: [],
+                        permissoes: []
+                    }
+                });
+                saveUsers(users);
+
+                // Add access log entry
+                addAccessLog(newUsername, newEmail);
+
+                // Send email notification to admin
+                const subject = encodeURIComponent('Novo Registo - Pedido de Ativação');
+                const body = encodeURIComponent(
+                    `Um novo utilizador solicitou registo na plataforma:\n\n` +
+                    `Utilizador: ${newUsername}\n` +
+                    `E-mail: ${newEmail}\n\n` +
+                    `Por favor, ative a conta no Painel de Administração.`
+                );
+                window.location.href = `mailto:alv.monteiro@gmail.com?subject=${subject}&body=${body}`;
+            }
+        });
+
+        // Toggle password visibility
+        function togglePassword(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const eyeWrapper = passwordInput.parentElement.querySelector('.eye-wrapper');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeWrapper.classList.remove('hidden');
+            } else {
+                passwordInput.type = 'password';
+                eyeWrapper.classList.add('hidden');
+            }
+        }
+
+        // Remove error on input
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', function() {
+                this.parentElement.parentElement.classList.remove('error');
+                this.parentElement.classList.remove('error');
+            });
+        });
+
+        // Initialize users on page load
+        loadDadosFromJSON(function() { initUsers(); });
+    </script>
+</body>
+</html>

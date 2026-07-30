@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Administração</title>
+    <base href="./">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: stretch;
+            position: relative;
+            background: #f0f0f0;
+            overflow-y: scroll;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png");
+            background-size: 150px;
+            background-repeat: repeat;
+            opacity: 0.08;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            text-align: left;
+            width: 100%;
+            max-width: 100%;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        h1 {
+            color: #000;
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 0 20px;
+            width: 320px;
+        }
+
+        .card {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-icon {
+            font-size: 28px;
+            margin-bottom: 0;
+        }
+
+        .card h2 {
+            color: #000;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .card p {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .card.hidden {
+            display: none;
+        }
+
+        .user-header {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        .header-right .card {
+            position: relative;
+            z-index: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #000;
+        }
+
+        .user-role {
+            background: linear-gradient(135deg, #D35400 0%, #E67E22 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .card {
+            background: white; padding: 12px 16px; border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: flex;
+            flex-direction: row; align-items: center; gap: 12px;
+            cursor: pointer; border: 1px solid #e1e8ed; color: #000;
+            font-family: inherit; font-size: inherit; text-align: left;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        .card .card-icon { font-size: 28px; }
+        .card .card-text h2 { color: #000; font-size: 14px; margin-bottom: 2px; }
+        .card .card-text p { color: #666; font-size: 11px; }
+
+        .access-denied {
+            background: #e74c3c;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: none;
+        }
+        @media print {
+            #btnSair { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <div class="header-left">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png" alt="ANEPC" style="width:120px;height:120px;object-fit:contain;">
+            <div style="line-height:1.2;">
+                <div style="font-size:20px;font-weight:600;color:#000;">AUTORIDADE NACIONAL DE EMERGÊNCIA E PROTEÇÃO CIVIL</div>
+                <div style="font-size:18px;font-weight:600;color:#000;">Comando Sub-Regional de Emergência e Proteção Civil Alto Minho</div>
+                <div style="font-size:16px;font-weight:700;color:#000;margin-top:4px;">LISTA TELEFÓNICA Comando Sub-Regional</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <a href="login.html" id="btnSair" class="card" style="margin:0;padding:8px 14px;text-decoration:none;color:#000;">
+                <div class="card-icon" style="font-size:20px;">&#128682;</div>
+                <div class="card-text">
+                    <h2>Sair</h2>
+                </div>
+            </a>
+            <div class="user-header" id="userHeader"></div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h1 style="font-size:24px;color:#000;text-align:center;margin:10px 0 20px 0;width:100%;">Painel de Administração</h1>
+
+        <div class="access-denied" id="accessDenied">
+            Não tem permissão para aceder a algumas secções.
+        </div>
+
+        <div class="dashboard">
+            <a href="contactos.html" class="card" id="cardContactos" onclick="safeNavigate(event, 'contactos.html', 'contactos')">
+                <div class="card-icon">&#128100;</div>
+                <div>
+                    <h2>Contactos</h2>
+                    <p>Lista de contactos das entidades</p>
+                </div>
+            </a>
+
+            <a href="grupos_contacto.html" class="card" id="cardGrupos" onclick="safeNavigate(event, 'grupos_contacto.html', 'contactos')">
+                <div class="card-icon">&#128101;</div>
+                <div>
+                    <h2>Grupos</h2>
+                    <p>Gerir grupos de contacto</p>
+                </div>
+            </a>
+
+            <a href="utilizadores.html" class="card" id="cardUtilizadores" onclick="safeNavigate(event, 'utilizadores.html', 'utilizadores')">
+                <div class="card-icon">&#128101;</div>
+                <div>
+                    <h2>Utilizadores</h2>
+                    <p>Gerir utilizadores registados</p>
+                </div>
+            </a>
+
+            <a href="tipos_entidades.html" class="card" onclick="safeNavigate(event, 'tipos_entidades.html', 'contactos')">
+                <div class="card-icon">&#128194;</div>
+                <div>
+                    <h2>Tipos de Entidade</h2>
+                    <p>Gerir tipos de entidade</p>
+                </div>
+            </a>
+
+            <a href="acessos.html" class="card" id="cardAcessos" onclick="safeNavigate(event, 'acessos.html', 'acessos')">
+                <div class="card-icon">&#128202;</div>
+                <div>
+                    <h2>Acessos</h2>
+                    <p>Ver registo de acessos</p>
+                </div>
+            </a>
+
+            <a href="permissoes.html" class="card" id="cardPermissoes" onclick="safeNavigate(event, 'permissoes.html', 'permissoes')">
+                <div class="card-icon">&#128272;</div>
+                <div>
+                    <h2>Permissões</h2>
+                    <p>Gerir permissões dos utilizadores</p>
+                </div>
+            </a>
+
+            <a href="partilhar.html" class="card" id="cardPartilhar" onclick="safeNavigate(event, 'partilhar.html', 'partilhar')">
+                <div class="card-icon">&#128228;</div>
+                <div>
+                    <h2>Partilhar</h2>
+                    <p>Partilhar a aplicação</p>
+                </div>
+            </a>
+        </div>
+
+
+    </div>
+
+    <script src="permissions.js"></script>
+    <script src="init_data.js"></script>
+    <script>
+        // Check if user is logged in
+        if (!isLoggedIn()) {
+            window.location.href = 'login.html';
+        } else {
+            var painelPerms = getPagePermissions('painel');
+            if (!painelPerms.includes('ver')) {
+                alert('Não tem permissão para aceder a esta página.');
+                window.location.href = 'login.html';
+            }
+
+            // Show user info
+            const user = getCurrentUser();
+            if (user) {
+                document.getElementById('userHeader').innerHTML = `
+                    <span class="user-name">${user.username}</span>
+                    <span class="user-role">${user.role}</span>
+                `;
+            }
+
+            // Ensure grupos permission exists for current user
+            function ensureGruposPermission() {
+                var user = getCurrentUser();
+                if (!user) return;
+                if (!user.pagePermissions) user.pagePermissions = {};
+                if (!user.pagePermissions.grupos) {
+                    user.pagePermissions.grupos = ['ver', 'criar', 'editar', 'apagar', 'gerir_contactos', 'enviar_email'];
+                    sessionStorage.setItem('currentUser', JSON.stringify(user));
+                    // Also update in localStorage users list
+                    var users = JSON.parse(localStorage.getItem('users')) || [];
+                    var idx = users.findIndex(function(u) { return u.username === user.username; });
+                    if (idx !== -1) {
+                        users[idx].pagePermissions = user.pagePermissions;
+                        localStorage.setItem('users', JSON.stringify(users));
+                    }
+                }
+            }
+            ensureGruposPermission();
+
+            // Check permissions for each card
+            function checkPageAccess() {
+                const user = getCurrentUser();
+                if (!user) return;
+
+                const pagePermissions = user.pagePermissions || {};
+                var hasAny = false;
+
+                // Utilizadores
+                if (!pagePermissions.utilizadores || !pagePermissions.utilizadores.includes('ver')) {
+                    document.getElementById('cardUtilizadores').classList.add('hidden');
+                } else { hasAny = true; }
+
+                // Acessos
+                if (!pagePermissions.acessos || !pagePermissions.acessos.includes('ver')) {
+                    document.getElementById('cardAcessos').classList.add('hidden');
+                } else { hasAny = true; }
+
+                // Permissões
+                if (!pagePermissions.permissoes || !pagePermissions.permissoes.includes('ver')) {
+                    document.getElementById('cardPermissoes').classList.add('hidden');
+                } else { hasAny = true; }
+
+                // Contactos
+                if (!pagePermissions.contactos || !pagePermissions.contactos.includes('ver')) {
+                    document.getElementById('cardContactos').classList.add('hidden');
+                } else { hasAny = true; }
+
+                // Grupos
+                if (!pagePermissions.grupos || !pagePermissions.grupos.includes('ver')) {
+                    document.getElementById('cardGrupos').classList.add('hidden');
+                } else { hasAny = true; }
+
+                // Partilhar
+                if (!pagePermissions.partilhar || !pagePermissions.partilhar.includes('ver')) {
+                    document.getElementById('cardPartilhar').classList.add('hidden');
+                } else { hasAny = true; }
+
+                if (!hasAny) {
+                    alert('Não tem permissão para aceder a nenhuma secção.');
+                    sessionStorage.removeItem('currentUser');
+                    window.location.href = 'login.html';
+                }
+            }
+
+            // Logout function
+            document.getElementById('btnSair').addEventListener('click', function(e) {
+                e.preventDefault();
+                sessionStorage.removeItem('currentUser');
+                window.location.href = 'login.html';
+            });
+
+            // Initialize
+            checkPageAccess();
+        }
+    </script>
+</body>
+</html>

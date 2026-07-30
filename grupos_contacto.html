@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grupos de Contacto</title>
+    <base href="./">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif; min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; position: relative; background: #f0f0f0; overflow-y: scroll; }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png");
+            background-size: 150px;
+            background-repeat: repeat;
+            opacity: 0.08;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+        .container { max-width: 100%; margin: 0 auto; }
+        h1 { color: #000; text-align: center; margin-bottom: 40px; font-size: 32px; }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 8px 15px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e1e8ed;
+            flex-shrink: 0;
+        }
+
+        .nav-links a {
+            color: #000;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+            background: rgba(255,255,255,0.7);
+        }
+
+        .nav-links a:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0,0,0,0.15); }
+        .nav-links a.active { background: #2c3e50; color: #fff; }
+
+        .section {
+            background: white; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); overflow: hidden;
+            position: relative; z-index: 1; display: flex; flex-direction: column;
+        }
+        .section h2 {
+            color: #E67E22; font-size: 22px; border-bottom: 2px solid #E67E22; padding: 20px 30px 10px;
+        }
+
+        .toolbar { display: flex; gap: 10px; padding: 20px 30px; background: #f8f9fa; border-bottom: 1px solid #e1e8ed; flex-wrap: wrap; align-items: center; }
+        .search-box { flex: 1; min-width: 200px; }
+        .search-box input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif; transition: all 0.2s; background: white; }
+        .search-box input:focus { outline: none; border-color: #E67E22; box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1); }
+        button { padding: 10px 20px; border: none; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        button:active { transform: scale(0.98); }
+        .btn-primary { background: #E67E22; color: white; }
+        .btn-primary:hover { background: #D35400; }
+        .btn-secondary { background: #95a5a6; color: white; }
+        .btn-secondary:hover { background: #7f8c8d; }
+        .btn-success { background: #27ae60; color: white; }
+        .btn-success:hover { background: #219a52; }
+        .btn-danger { background: #CB4335; color: white; }
+        .btn-danger:hover { background: #a93226; }
+        .btn-info { background: #2980b9; color: white; }
+        .btn-info:hover { background: #2471a3; }
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+        .main-wrapper { display: flex; align-items: flex-start; gap: 0; max-width: 100%; margin: 0 auto; width: 100%; position: relative; z-index: 1; }
+        .main-wrapper .container { flex: 1; min-width: 0; margin: 0; padding: 0; }
+        .bottom-actions { display: flex; flex-direction: column; gap: 12px; padding: 10px 20px 30px 15px; align-items: flex-start; min-width: 220px; flex-shrink: 0; width: 320px; }
+        .bottom-actions .card { width: 100%; }
+        .card {
+            background: white; padding: 12px 16px; border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: flex;
+            flex-direction: row; align-items: center; gap: 12px;
+            cursor: pointer; border: 1px solid #e1e8ed; color: #000;
+            font-family: inherit; font-size: inherit; text-align: left;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        .card .card-icon { font-size: 28px; }
+        .card .card-text h2 { color: #000; font-size: 14px; margin-bottom: 2px; }
+        .card .card-text p { color: #666; font-size: 11px; }
+
+        .stats { display: flex; gap: 20px; padding: 15px 30px; background: #f8f9fa; border-bottom: 1px solid #e1e8ed; font-size: 13px; color: #666; }
+        .stats span { font-weight: 600; color: #2c3e50; }
+
+        .groups-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; padding: 25px 30px; }
+        .group-card { background: #f8f9fa; border: 1px solid #e1e8ed; border-radius: 8px; padding: 20px; transition: box-shadow 0.2s, transform 0.2s; }
+        .group-card:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .group-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .group-name { font-size: 18px; font-weight: 600; color: #2c3e50; }
+        .group-color { width: 16px; height: 16px; border-radius: 50%; border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.2); flex-shrink: 0; }
+        .group-description { font-size: 13px; color: #666; margin-bottom: 12px; line-height: 1.4; }
+        .group-meta { display: flex; gap: 15px; font-size: 12px; color: #999; margin-bottom: 12px; }
+        .group-meta span { display: flex; align-items: center; gap: 4px; }
+        .group-actions { display: flex; gap: 6px; border-top: 1px solid #e1e8ed; padding-top: 12px; }
+
+        .empty-state { text-align: center; padding: 60px 30px; color: #999; grid-column: 1 / -1; }
+        .empty-state .icon { font-size: 48px; margin-bottom: 15px; }
+        .empty-state h3 { font-size: 18px; color: #666; margin-bottom: 8px; }
+        .empty-state p { font-size: 14px; }
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; justify-content: center; align-items: center; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: white; border-radius: 8px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .modal-header { background: linear-gradient(135deg, #D35400 0%, #E67E22 100%); color: white; padding: 20px 25px; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h2 { font-size: 18px; font-weight: 600; }
+        .modal-close { background: none; color: white; font-size: 24px; padding: 0; min-width: auto; line-height: 1; }
+        .modal-close:hover { opacity: 0.8; background: none; }
+        .modal-body { padding: 25px; }
+        .form-row { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 15px; }
+        .form-group { display: flex; flex-direction: column; }
+        label { font-size: 13px; font-weight: 500; color: #555; margin-bottom: 5px; }
+        .required::after { content: " *"; color: #e74c3c; }
+        input, select, textarea { padding: 9px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif; transition: all 0.2s; background: white; }
+        textarea { resize: vertical; min-height: 80px; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #E67E22; box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1); }
+        .modal-footer { padding: 15px 25px; background: #f8f9fa; border-top: 1px solid #e1e8ed; display: flex; justify-content: flex-end; gap: 10px; border-radius: 0 0 8px 8px; }
+
+        .color-options { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+        .color-option { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: border-color 0.2s, transform 0.2s; }
+        .color-option:hover { transform: scale(1.1); }
+        .color-option.selected { border-color: #000; }
+
+        .contacts-list { max-height: 300px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; padding: 10px; }
+        .contact-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 4px; cursor: pointer; transition: background 0.15s; }
+        .contact-item:hover { background: #f0f7ff; }
+        .contact-item.selected { background: #e8f4fd; }
+        .contact-item input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
+        .contact-item-info { flex: 1; }
+        .contact-item-name { font-weight: 500; font-size: 14px; color: #2c3e50; }
+        .contact-item-detail { font-size: 12px; color: #666; }
+
+        .group-contacts-section { margin-top: 20px; border-top: 1px solid #e1e8ed; padding-top: 20px; }
+        .group-contacts-section h3 { font-size: 16px; color: #2c3e50; margin-bottom: 15px; }
+        .group-contact-tag { display: inline-flex; align-items: center; gap: 6px; background: #e8f4fd; color: #3498db; padding: 4px 10px; border-radius: 15px; font-size: 12px; margin: 4px; }
+        .group-contact-tag button { background: none; color: #e74c3c; padding: 0; min-width: auto; font-size: 14px; line-height: 1; }
+
+        .toast { position: fixed; bottom: 30px; right: 30px; padding: 12px 20px; border-radius: 6px; color: white; font-size: 14px; font-weight: 500; z-index: 2000; opacity: 0; transform: translateY(20px); transition: all 0.3s; }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success { background: #27ae60; }
+        .toast.error { background: #e74c3c; }
+
+        @media (max-width: 768px) {
+            .toolbar { flex-direction: column; }
+            .groups-grid { grid-template-columns: 1fr; }
+            .stats { flex-wrap: wrap; gap: 10px; }
+        }
+        .user-header {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        .header-right .card {
+            position: relative;
+            z-index: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #000;
+        }
+
+        .user-role {
+            background: linear-gradient(135deg, #D35400 0%, #E67E22 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+        @media print {
+            .toolbar, .group-actions, .nav-links, #btnSairBottom { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <div class="header-left">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png" alt="ANEPC" style="width:120px;height:120px;object-fit:contain;">
+            <div style="line-height:1.2;">
+                <div style="font-size:20px;font-weight:600;color:#000;">AUTORIDADE NACIONAL DE EMERGÊNCIA E PROTEÇÃO CIVIL</div>
+                <div style="font-size:18px;font-weight:600;color:#000;">Comando Sub-Regional de Emergência e Proteção Civil Alto Minho</div>
+                <div style="font-size:16px;font-weight:700;color:#000;margin-top:4px;">LISTA TELEFÓNICA Comando Sub-Regional</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <button type="button" class="card" id="btnSairBottom" style="margin:0;padding:8px 14px;">
+                <div class="card-icon" style="font-size:20px;">&#128682;</div>
+                <div class="card-text">
+                    <h2>Sair</h2>
+                </div>
+            </button>
+            <div class="user-header" id="userHeader"></div>
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="bottom-actions">
+            <button type="button" class="card" id="btnNovoGrupo">
+                <div class="card-icon">&#128101;</div>
+                <div class="card-text">
+                    <h2>Criar Novo Grupo</h2>
+                    <p>Adicionar novo grupo de contacto</p>
+                </div>
+            </button>
+        </div>
+
+        <div class="container">
+        <h1 style="font-size:24px;color:#2c3e50;text-align:center;margin:10px 0 20px 0;">GRUPOS DE CONTACTO</h1>
+
+        <div class="section">
+            <div class="nav-links">
+                <a href="admin.html" onclick="safeNavigate(event, 'admin.html', 'painel')">Painel</a>
+                <a href="contactos.html" onclick="safeNavigate(event, 'contactos.html', 'contactos')">Contactos</a>
+                <a href="utilizadores.html" onclick="safeNavigate(event, 'utilizadores.html', 'utilizadores')">Utilizadores</a>
+                <a href="tipos_entidades.html" onclick="safeNavigate(event, 'tipos_entidades.html', 'contactos')">Tipos de Entidade</a>
+                <a href="acessos.html" onclick="safeNavigate(event, 'acessos.html', 'acessos')">Acessos</a>
+                <a href="permissoes.html" onclick="safeNavigate(event, 'permissoes.html', 'permissoes')">Permissões</a>
+                <a href="partilhar.html" onclick="safeNavigate(event, 'partilhar.html', 'partilhar')">Partilhar</a>
+            </div>
+            <div class="toolbar">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Pesquisar grupos...">
+                </div>
+            </div>
+
+            <div class="stats">
+                <div>Total: <span id="totalCount">0</span> grupos</div>
+            </div>
+
+            <div class="groups-grid" id="groupsGrid">
+                <div class="empty-state" id="emptyState" style="display:none;">
+                    <div class="icon">&#128101;</div>
+                    <h3>Nenhum grupo encontrado</h3>
+                    <p>Crie um novo grupo para organizar os seus contactos.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    </div>
+
+    <!-- Modal Novo/Editar Grupo -->
+    <div class="modal-overlay" id="modalGrupo">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Novo Grupo</h2>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formGrupo">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nomeGrupo" class="required">Nome do Grupo</label>
+                            <input type="text" id="nomeGrupo" name="nome" maxlength="100" placeholder="Ex: Fornecedores, Clientes VIP...">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="descricaoGrupo">Descrição</label>
+                            <textarea id="descricaoGrupo" name="descricao" maxlength="255" placeholder="Descrição opcional do grupo..."></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Cor do Grupo</label>
+                            <div class="color-options" id="colorOptions">
+                                <div class="color-option selected" data-color="#3498db" style="background:#3498db;"></div>
+                                <div class="color-option" data-color="#e74c3c" style="background:#e74c3c;"></div>
+                                <div class="color-option" data-color="#27ae60" style="background:#27ae60;"></div>
+                                <div class="color-option" data-color="#f39c12" style="background:#f39c12;"></div>
+                                <div class="color-option" data-color="#E67E22" style="background:#E67E22;"></div>
+                                <div class="color-option" data-color="#1abc9c" style="background:#1abc9c;"></div>
+                                <div class="color-option" data-color="#e67e22" style="background:#e67e22;"></div>
+                                <div class="color-option" data-color="#2c3e50" style="background:#2c3e50;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tipoGrupo">Tipo de Grupo</label>
+                            <select id="tipoGrupo" name="tipo">
+                                <option value="">Selecionar...</option>
+                                <option value="Geral">Geral</option>
+                                <option value="Departamento">Departamento</option>
+                                <option value="Regiao">Região</option>
+                                <option value="Projeto">Projeto</option>
+                                <option value="Urgencia">Urgência</option>
+                                <option value="Personalizado">Personalizado</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="btnCancelar">Cancelar</button>
+                <button class="btn-success" id="btnGuardarGrupo">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detalhes do Grupo -->
+    <div class="modal-overlay" id="modalDetalhes">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Detalhes do Grupo</h2>
+                <button class="modal-close" id="modalDetalhesClose">&times;</button>
+            </div>
+            <div class="modal-body" id="detalhesContent"></div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="btnFecharDetalhes">Fechar</button>
+                <button class="btn-info" id="btnEditarDetalhes">Editar</button>
+                <button class="btn-danger" id="btnApagarGrupo">Apagar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar Contactos ao Grupo -->
+    <div class="modal-overlay" id="modalContactosGrupo">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Gerir Contactos do Grupo</h2>
+                <button class="modal-close" id="modalContactosGrupoClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="currentGroupContactsSection" style="margin-bottom:15px;"></div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <input type="text" id="searchContactos" placeholder="Pesquisar contactos para adicionar...">
+                </div>
+                <label style="font-size:12px;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Contactos Disponiveis</label>
+                <div class="contacts-list" id="availableContactsList"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="btnCancelarContactos">Cancelar</button>
+                <button class="btn-success" id="btnGuardarContactos">Guardar Alteracoes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Enviar Email -->
+    <div class="modal-overlay" id="modalEmail">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Enviar Email para Grupo</h2>
+                <button class="modal-close" id="modalEmailClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label>Destinatários (BCC)</label>
+                    <div id="emailRecipients" style="background:#f8f9fa;border:1px solid #ddd;border-radius:4px;padding:10px;max-height:200px;overflow-y:auto;font-size:13px;color:#555;"></div>
+                    <p style="font-size:11px;color:#999;margin-top:5px;">Emails dos contactos do grupo. Serão colocados em BCC para proteger a privacidade.</p>
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="emailAssunto">Assunto</label>
+                    <input type="text" id="emailAssunto" maxlength="200" placeholder="Assunto do email...">
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="emailCorpo">Mensagem</label>
+                    <textarea id="emailCorpo" rows="8" placeholder="Escreva a sua mensagem aqui..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="btnCancelarEmail">Cancelar</button>
+                <button class="btn-success" id="btnEnviarEmail">&#9993; Abrir no Outlook</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="permissions.js"></script>
+    <script src="init_data.js"></script>
+    <script>
+        (function() {
+            if (!isLoggedIn()) { window.location.href = 'login.html'; return; }
+            var gruposPerms = getPagePermissions('grupos');
+            if (!gruposPerms.includes('ver')) {
+                alert('Não tem permissão para aceder a esta página.');
+                window.location.href = 'admin.html';
+                return;
+            }
+
+            var user = getCurrentUser();
+            if (user) {
+                document.getElementById('userHeader').innerHTML =
+                    '<span class="user-name">' + user.username + '</span>' +
+                    '<span class="user-role">' + user.role + '</span>';
+            }
+
+            if (!gruposPerms.includes('criar')) {
+                var el = document.getElementById('btnNovoGrupo'); if (el) el.style.display = 'none';
+            }
+            if (!gruposPerms.includes('editar')) {
+                window._canEdit = false;
+            } else {
+                window._canEdit = true;
+            }
+            if (!gruposPerms.includes('apagar')) {
+                window._canDelete = false;
+            } else {
+                window._canDelete = true;
+            }
+            if (!gruposPerms.includes('gerir_contactos')) {
+                window._canManageContacts = false;
+            } else {
+                window._canManageContacts = true;
+            }
+            if (!gruposPerms.includes('enviar_email')) {
+                window._canSendEmail = false;
+            } else {
+                window._canSendEmail = true;
+            }
+
+            var btnSairBottom = document.getElementById('btnSairBottom');
+            if (btnSairBottom) btnSairBottom.addEventListener('click', function(e) {
+                e.preventDefault();
+                sessionStorage.removeItem('currentUser');
+                window.location.href = 'login.html';
+            });
+
+            var grupos = [];
+            var allContactos = [];
+            var editingId = null;
+            var viewingGroupId = null;
+            var selectedColor = '#3498db';
+
+            function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
+
+            function loadFromStorage() {
+                var saved = localStorage.getItem('gruposContacto');
+                if (saved) {
+                    grupos = JSON.parse(saved);
+                } else {
+                    loadDadosFromJSON(function() {
+                        var saved2 = localStorage.getItem('gruposContacto');
+                        grupos = saved2 ? JSON.parse(saved2) : [
+                            { id: generateId(), nome: 'Camara Municipal', descricao: 'Contactos de Camaras Municipais', cor: '#3498db', tipo: 'Regiao', contactos: [], dataCriacao: '2024-01-01' },
+                            { id: generateId(), nome: 'Bombeiros', descricao: 'Contactos de Bombeiros', cor: '#e74c3c', tipo: 'Urgencia', contactos: [], dataCriacao: '2024-01-01' }
+                        ];
+                        saveToStorage();
+                    });
+                }
+
+                var savedContacts = localStorage.getItem('listaContactos');
+                allContactos = savedContacts ? JSON.parse(savedContacts) : [];
+            }
+
+            function saveToStorage() { localStorage.setItem('gruposContacto', JSON.stringify(grupos)); }
+
+            function showToast(message, type) {
+                var toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.className = 'toast ' + type + ' show';
+                setTimeout(function() { toast.classList.remove('show'); }, 3000);
+            }
+
+            function renderGroups() {
+                var grid = document.getElementById('groupsGrid');
+                var search = document.getElementById('searchInput').value.toLowerCase();
+                var emptyState = document.getElementById('emptyState');
+
+                var filtered = grupos.filter(function(g) {
+                    return g.nome.toLowerCase().indexOf(search) !== -1 ||
+                           (g.descricao && g.descricao.toLowerCase().indexOf(search) !== -1) ||
+                           (g.tipo && g.tipo.toLowerCase().indexOf(search) !== -1);
+                });
+
+                document.getElementById('totalCount').textContent = filtered.length;
+
+                var html = '';
+                filtered.forEach(function(grupo) {
+                    var contactCount = grupo.contactos ? grupo.contactos.length : 0;
+                    html += '<div class="group-card" data-id="' + grupo.id + '">' +
+                        '<div class="group-card-header">' +
+                            '<div class="group-name">' + escapeHtml(grupo.nome) + '</div>' +
+                            '<div class="group-color" style="background:' + (grupo.cor || '#3498db') + ';"></div>' +
+                        '</div>' +
+                        '<div class="group-description">' + escapeHtml(grupo.descricao || 'Sem descrição') + '</div>' +
+                        '<div class="group-meta">' +
+                            '<span>&#128100; ' + contactCount + ' contacto(s)</span>' +
+                            '<span>&#128196; ' + (grupo.tipo || 'Geral') + '</span>' +
+                        '</div>' +
+                        '<div class="group-actions">' +
+                            '<button class="btn-primary btn-sm" onclick="viewGroup(\'' + grupo.id + '\')">Ver</button>' +
+                            (window._canManageContacts !== false ? '<button class="btn-info btn-sm" onclick="addContactsToGroup(\'' + grupo.id + '\')">+ Contactos</button>' : '') +
+                            (window._canSendEmail !== false ? '<button class="btn-sm" style="background:#f39c12;color:white;" onclick="openEmailModal(\'' + grupo.id + '\')">&#9993; Email</button>' : '') +
+                            (window._canEdit !== false ? '<button class="btn-secondary btn-sm" onclick="editGroup(\'' + grupo.id + '\')">Editar</button>' : '') +
+                            (window._canDelete !== false ? '<button class="btn-danger btn-sm" onclick="deleteGroup(\'' + grupo.id + '\')">Apagar</button>' : '') +
+                        '</div>' +
+                    '</div>';
+                });
+
+                if (filtered.length === 0) {
+                    html = '<div class="empty-state"><div class="icon">&#128101;</div><h3>Nenhum grupo encontrado</h3><p>Crie um novo grupo para organizar os seus contactos.</p></div>';
+                }
+
+                grid.innerHTML = html;
+            }
+
+            function escapeHtml(text) {
+                var div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function openModal(id) { document.getElementById(id).classList.add('active'); }
+            function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+            function resetForm() {
+                document.getElementById('formGrupo').reset();
+                editingId = null;
+                selectedColor = '#3498db';
+                document.querySelectorAll('.color-option').forEach(function(el) { el.classList.remove('selected'); });
+                document.querySelector('.color-option[data-color="#3498db"]').classList.add('selected');
+            }
+
+            // Color picker
+            document.getElementById('colorOptions').addEventListener('click', function(e) {
+                var option = e.target.closest('.color-option');
+                if (!option) return;
+                document.querySelectorAll('.color-option').forEach(function(el) { el.classList.remove('selected'); });
+                option.classList.add('selected');
+                selectedColor = option.getAttribute('data-color');
+            });
+
+            // Create/Edit
+            document.getElementById('btnNovoGrupo').addEventListener('click', function() {
+                resetForm();
+                document.getElementById('modalTitle').textContent = 'Novo Grupo';
+                openModal('modalGrupo');
+            });
+
+            document.getElementById('btnGuardarGrupo').addEventListener('click', function() {
+                var nome = document.getElementById('nomeGrupo').value.trim();
+                if (!nome) { showToast('Insira o nome do grupo', 'error'); return; }
+
+                var dados = {
+                    nome: nome,
+                    descricao: document.getElementById('descricaoGrupo').value.trim(),
+                    cor: selectedColor,
+                    tipo: document.getElementById('tipoGrupo').value
+                };
+
+                if (editingId) {
+                    var idx = grupos.findIndex(function(g) { return g.id === editingId; });
+                    if (idx !== -1) {
+                        grupos[idx].nome = dados.nome;
+                        grupos[idx].descricao = dados.descricao;
+                        grupos[idx].cor = dados.cor;
+                        grupos[idx].tipo = dados.tipo;
+                    }
+                    showToast('Grupo atualizado com sucesso!', 'success');
+                } else {
+                    dados.id = generateId();
+                    dados.contactos = [];
+                    dados.dataCriacao = new Date().toISOString().split('T')[0];
+                    grupos.push(dados);
+                    showToast('Grupo criado com sucesso!', 'success');
+                }
+
+                saveToStorage();
+                renderGroups();
+                closeModal('modalGrupo');
+            });
+
+            // View
+            window.viewGroup = function(id) {
+                var grupo = grupos.find(function(g) { return g.id === id; });
+                if (!grupo) return;
+                viewingGroupId = id;
+
+                var html = '<div style="border-left: 4px solid ' + (grupo.cor || '#3498db') + '; padding-left: 15px; margin-bottom: 20px;">' +
+                    '<h3 style="font-size: 20px; color: #2c3e50;">' + escapeHtml(grupo.nome) + '</h3>' +
+                    '<p style="color: #666; margin-top: 5px;">' + escapeHtml(grupo.descricao || 'Sem descrição') + '</p>' +
+                '</div>' +
+                '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">' +
+                    '<div><label style="font-size:11px;text-transform:uppercase;color:#999;letter-spacing:0.5px;">Tipo</label><p style="font-size:14px;color:#000;">' + escapeHtml(grupo.tipo || 'Geral') + '</p></div>' +
+                    '<div><label style="font-size:11px;text-transform:uppercase;color:#999;letter-spacing:0.5px;">Data de Criação</label><p style="font-size:14px;color:#000;">' + escapeHtml(grupo.dataCriacao || 'N/D') + '</p></div>' +
+                '</div>' +
+                '<div class="group-contacts-section">' +
+                    '<h3>Contactos no Grupo (' + (grupo.contactos ? grupo.contactos.length : 0) + ')</h3>';
+
+                if (grupo.contactos && grupo.contactos.length > 0) {
+                    html += '<div style="margin-top: 10px;">';
+                    grupo.contactos.forEach(function(cId) {
+                        var c = allContactos.find(function(ct) { return ct.id === cId; });
+                        if (c) {
+                            html += '<div class="group-contact-tag">' + escapeHtml(c.nome) + ' (' + escapeHtml(c.entidade || '') + ')' +
+                                '<button onclick="removeContactFromGroup(\'' + id + '\', \'' + cId + '\')" title="Remover">&times;</button></div>';
+                        }
+                    });
+                    html += '</div>';
+                } else {
+                    html += '<p style="color: #999; font-size: 13px; margin-top: 10px;">Nenhum contacto neste grupo.</p>';
+                }
+
+                html += '</div>';
+
+                document.getElementById('detalhesContent').innerHTML = html;
+                openModal('modalDetalhes');
+            };
+
+            window.removeContactFromGroup = function(groupId, contactId) {
+                var grupo = grupos.find(function(g) { return g.id === groupId; });
+                if (!grupo || !grupo.contactos) return;
+                grupo.contactos = grupo.contactos.filter(function(cId) { return cId !== contactId; });
+                saveToStorage();
+                viewGroup(groupId);
+                renderGroups();
+                showToast('Contacto removido do grupo', 'success');
+            };
+
+            // Edit
+            window.editGroup = function(id) {
+                var grupo = grupos.find(function(g) { return g.id === id; });
+                if (!grupo) return;
+                editingId = id;
+                document.getElementById('modalTitle').textContent = 'Editar Grupo';
+                document.getElementById('nomeGrupo').value = grupo.nome;
+                document.getElementById('descricaoGrupo').value = grupo.descricao || '';
+                document.getElementById('tipoGrupo').value = grupo.tipo || '';
+                selectedColor = grupo.cor || '#3498db';
+                document.querySelectorAll('.color-option').forEach(function(el) {
+                    el.classList.remove('selected');
+                    if (el.getAttribute('data-color') === selectedColor) el.classList.add('selected');
+                });
+                openModal('modalGrupo');
+            };
+
+            // Delete
+            window.deleteGroup = function(id) {
+                if (!confirm('Tem a certeza que deseja apagar este grupo?')) return;
+                grupos = grupos.filter(function(g) { return g.id !== id; });
+                saveToStorage();
+                renderGroups();
+                showToast('Grupo apagado com sucesso!', 'success');
+            };
+
+            // Add contacts to group
+            window.addContactsToGroup = function(id) {
+                viewingGroupId = id;
+                var grupo = grupos.find(function(g) { return g.id === id; });
+                if (!grupo) return;
+
+                // Show current contacts in group
+                var currentSection = document.getElementById('currentGroupContactsSection');
+                var currentHtml = '';
+                if (grupo.contactos && grupo.contactos.length > 0) {
+                    currentHtml = '<label style="font-size:12px;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:block;">Contactos no Grupo (' + grupo.contactos.length + ')</label>' +
+                        '<div style="background:#f0f7ff;border:1px solid #E67E22;border-radius:6px;padding:10px;max-height:120px;overflow-y:auto;">';
+                    grupo.contactos.forEach(function(cId) {
+                        var c = allContactos.find(function(ct) { return ct.id === cId; });
+                        if (c) {
+                            currentHtml += '<div class="group-contact-tag" style="background:#E67E22;color:white;">' +
+                                escapeHtml(c.nome) +
+                                '<button onclick="quickRemoveFromGroup(\'' + id + '\', \'' + cId + '\')" title="Remover" style="color:white;">&times;</button>' +
+                            '</div>';
+                        }
+                    });
+                    currentHtml += '</div>';
+                } else {
+                    currentHtml = '<p style="color:#999;font-size:13px;padding:10px;background:#f8f9fa;border-radius:6px;">Nenhum contacto neste grupo ainda.</p>';
+                }
+                currentSection.innerHTML = currentHtml;
+
+                // Show all available contacts
+                var list = document.getElementById('availableContactsList');
+                var html = '';
+                allContactos.forEach(function(c) {
+                    var isInGroup = grupo.contactos && grupo.contactos.indexOf(c.id) !== -1;
+                    html += '<div class="contact-item' + (isInGroup ? ' selected' : '') + '" data-id="' + c.id + '">' +
+                        '<input type="checkbox" ' + (isInGroup ? 'checked' : '') + ' data-contact-id="' + c.id + '">' +
+                        '<div class="contact-item-info">' +
+                            '<div class="contact-item-name">' + escapeHtml(c.nome) + (isInGroup ? ' <span style="background:#27ae60;color:white;padding:2px 6px;border-radius:8px;font-size:10px;margin-left:6px;">No Grupo</span>' : '') + '</div>' +
+                            '<div class="contact-item-detail">' + escapeHtml(c.entidade || '') + ' - ' + escapeHtml(c.emails && c.emails[0] ? c.emails[0] : '') + '</div>' +
+                        '</div>' +
+                    '</div>';
+                });
+
+                if (allContactos.length === 0) {
+                    html = '<p style="text-align:center;color:#999;padding:20px;">Nenhum contacto disponivel. Adicione contactos primeiro na pagina de Contactos.</p>';
+                }
+
+                list.innerHTML = html;
+                openModal('modalContactosGrupo');
+            };
+
+            // Quick remove from group (inside modal)
+            window.quickRemoveFromGroup = function(groupId, contactId) {
+                var grupo = grupos.find(function(g) { return g.id === groupId; });
+                if (!grupo || !grupo.contactos) return;
+                grupo.contactos = grupo.contactos.filter(function(cId) { return cId !== contactId; });
+                saveToStorage();
+                addContactsToGroup(groupId);
+                renderGroups();
+            };
+
+            // Toggle contact selection
+            document.getElementById('availableContactsList').addEventListener('click', function(e) {
+                var item = e.target.closest('.contact-item');
+                if (!item) return;
+                var cb = item.querySelector('input[type="checkbox"]');
+                cb.checked = !cb.checked;
+                item.classList.toggle('selected', cb.checked);
+            });
+
+            // Search contacts in modal
+            document.getElementById('searchContactos').addEventListener('input', function() {
+                var search = this.value.toLowerCase();
+                document.querySelectorAll('#availableContactsList .contact-item').forEach(function(item) {
+                    var name = item.querySelector('.contact-item-name').textContent.toLowerCase();
+                    var detail = item.querySelector('.contact-item-detail').textContent.toLowerCase();
+                    item.style.display = (name.indexOf(search) !== -1 || detail.indexOf(search) !== -1) ? 'flex' : 'none';
+                });
+            });
+
+            // Save contacts to group
+            document.getElementById('btnGuardarContactos').addEventListener('click', function() {
+                var grupo = grupos.find(function(g) { return g.id === viewingGroupId; });
+                if (!grupo) return;
+
+                var previousCount = grupo.contactos ? grupo.contactos.length : 0;
+                var selected = [];
+                document.querySelectorAll('#availableContactsList input[type="checkbox"]:checked').forEach(function(cb) {
+                    selected.push(cb.getAttribute('data-contact-id'));
+                });
+
+                grupo.contactos = selected;
+                saveToStorage();
+                renderGroups();
+                closeModal('modalContactosGrupo');
+
+                var diff = selected.length - previousCount;
+                if (diff > 0) {
+                    showToast(diff + ' contacto(s) adicionado(s) ao grupo!', 'success');
+                } else if (diff < 0) {
+                    showToast(Math.abs(diff) + ' contacto(s) removido(s) do grupo!', 'success');
+                } else {
+                    showToast('Grupo atualizado!', 'success');
+                }
+            });
+
+            // Close modals
+            document.getElementById('modalClose').addEventListener('click', function() { closeModal('modalGrupo'); });
+            document.getElementById('btnCancelar').addEventListener('click', function() { closeModal('modalGrupo'); });
+            document.getElementById('modalDetalhesClose').addEventListener('click', function() { closeModal('modalDetalhes'); });
+            document.getElementById('btnFecharDetalhes').addEventListener('click', function() { closeModal('modalDetalhes'); });
+            document.getElementById('modalContactosGrupoClose').addEventListener('click', function() { closeModal('modalContactosGrupo'); });
+            document.getElementById('btnCancelarContactos').addEventListener('click', function() { closeModal('modalContactosGrupo'); });
+
+            // Edit from details
+            document.getElementById('btnEditarDetalhes').addEventListener('click', function() {
+                closeModal('modalDetalhes');
+                editGroup(viewingGroupId);
+            });
+
+            // Delete from details
+            document.getElementById('btnApagarGrupo').addEventListener('click', function() {
+                deleteGroup(viewingGroupId);
+                closeModal('modalDetalhes');
+            });
+
+            // Close on overlay click
+            document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+                overlay.addEventListener('click', function(e) {
+                    if (e.target === overlay) overlay.classList.remove('active');
+                });
+            });
+
+            // Email functionality
+            var currentEmailGroupId = null;
+
+            function getContactEmails(c) {
+                var emails = [];
+                var sources = [c.emails, c.email, c.emailAddress];
+                sources.forEach(function(val) {
+                    if (!val) return;
+                    if (typeof val === 'string') { if (val.trim()) emails.push(val.trim()); return; }
+                    if (Array.isArray(val)) {
+                        val.forEach(function(e) { if (e && typeof e === 'string' && e.trim()) emails.push(e.trim()); });
+                    }
+                });
+                return emails;
+            }
+
+            function getContactPhones(c, field) {
+                var val = c[field];
+                if (!val) return [];
+                if (typeof val === 'string') return val.trim() ? [val.trim()] : [];
+                if (Array.isArray(val)) return val.filter(function(v) { return v && typeof v === 'string' && v.trim(); });
+                return [];
+            }
+
+            window.openEmailModal = function(groupId) {
+                var grupo = grupos.find(function(g) { return g.id === groupId; });
+                if (!grupo) return;
+
+                currentEmailGroupId = groupId;
+                var allEmails = [];
+                var contactDetails = [];
+
+                if (grupo.contactos && grupo.contactos.length > 0) {
+                    grupo.contactos.forEach(function(cId) {
+                        var c = allContactos.find(function(ct) { return ct.id === cId; });
+                        if (!c) return;
+                        var emails = getContactEmails(c);
+                        var tels = getContactPhones(c, 'telefones');
+                        var tmovels = getContactPhones(c, 'telemoveis');
+                        var satelites = getContactPhones(c, 'satelite');
+                        contactDetails.push({ nome: c.nome || 'Sem nome', emails: emails, telefones: tels, telemoveis: tmovels, satelites: satelites });
+                        emails.forEach(function(email) {
+                            if (allEmails.indexOf(email) === -1) allEmails.push(email);
+                        });
+                    });
+                }
+
+                var html = '';
+                if (contactDetails.length > 0) {
+                    contactDetails.forEach(function(ct) {
+                        var hasEmail = ct.emails.length > 0;
+                        var border = hasEmail ? '#27ae60' : '#e74c3c';
+                        html += '<div style="padding:8px 10px;margin-bottom:6px;background:' + (hasEmail ? '#f0fff4' : '#fef5f5') + ';border:1px solid ' + border + ';border-radius:6px;font-size:13px;">';
+                        html += '<div style="font-weight:600;color:#2c3e50;margin-bottom:4px;">' + escapeHtml(ct.nome) + '</div>';
+                        if (ct.emails.length > 0) {
+                            ct.emails.forEach(function(e) { html += '<div style="color:#E67E22;font-size:12px;">&#9993; ' + escapeHtml(e) + '</div>'; });
+                        } else {
+                            html += '<div style="color:#999;font-size:12px;">&#9993; Sem email</div>';
+                        }
+                        if (ct.telefones.length > 0) {
+                            ct.telefones.forEach(function(t) { var num = t.replace(/\s+/g, ''); html += '<div style="color:#666;font-size:11px;"><a href="tel:' + num + '" style="text-decoration:none;color:#666;" title="Ligar para ' + escapeHtml(t) + '">&#9742; Tel: ' + escapeHtml(t) + '</a></div>'; });
+                        }
+                        if (ct.telemoveis.length > 0) {
+                            ct.telemoveis.forEach(function(t) { var num = t.replace(/\s+/g, ''); html += '<div style="color:#666;font-size:11px;"><a href="tel:' + num + '" style="text-decoration:none;color:#666;" title="Ligar para ' + escapeHtml(t) + '">&#9743; Tlm: ' + escapeHtml(t) + '</a></div>'; });
+                        }
+                        if (ct.satelites.length > 0) {
+                            ct.satelites.forEach(function(t) { html += '<div style="color:#666;font-size:11px;">&#128225; Sat: ' + escapeHtml(t) + '</div>'; });
+                        }
+                        html += '</div>';
+                    });
+
+                    if (allEmails.length > 0) {
+                        document.getElementById('btnEnviarEmail').disabled = false;
+                        document.getElementById('btnEnviarEmail').style.opacity = '1';
+                    } else {
+                        html += '<div style="text-align:center;padding:10px;color:#e74c3c;font-size:12px;margin-top:5px;">Nenhum dos contactos tem email. Adicione email aos contactos na pagina de Contactos.</div>';
+                        document.getElementById('btnEnviarEmail').disabled = true;
+                        document.getElementById('btnEnviarEmail').style.opacity = '0.5';
+                    }
+                } else {
+                    html = '<div style="text-align:center;padding:20px;color:#999;">Nenhum contacto neste grupo.</div>';
+                    document.getElementById('btnEnviarEmail').disabled = true;
+                    document.getElementById('btnEnviarEmail').style.opacity = '0.5';
+                }
+
+                document.getElementById('emailRecipients').innerHTML = html;
+                document.getElementById('emailAssunto').value = '';
+                document.getElementById('emailCorpo').value = '';
+                openModal('modalEmail');
+            };
+
+            document.getElementById('btnEnviarEmail').addEventListener('click', function() {
+                if (this.disabled) return;
+                var grupo = grupos.find(function(g) { return g.id === currentEmailGroupId; });
+                if (!grupo) return;
+
+                var bccEmails = [];
+                if (grupo.contactos && grupo.contactos.length > 0) {
+                    grupo.contactos.forEach(function(cId) {
+                        var c = allContactos.find(function(ct) { return ct.id === cId; });
+                        if (c) {
+                            getContactEmails(c).forEach(function(email) {
+                                if (bccEmails.indexOf(email) === -1) bccEmails.push(email);
+                            });
+                        }
+                    });
+                }
+
+                if (bccEmails.length === 0) {
+                    showToast('Nenhum email valido encontrado.', 'error');
+                    return;
+                }
+
+                var assunto = encodeURIComponent(document.getElementById('emailAssunto').value.trim());
+                var corpo = encodeURIComponent(document.getElementById('emailCorpo').value.trim());
+                var bcc = encodeURIComponent(bccEmails.join(';'));
+
+                var mailtoUrl = 'mailto:?bcc=' + bcc + '&subject=' + assunto + '&body=' + corpo;
+                window.open(mailtoUrl, '_self');
+
+                closeModal('modalEmail');
+                showToast('A abrir o Outlook com ' + bccEmails.length + ' destinatario(s) em BCC...', 'success');
+            });
+
+            document.getElementById('modalEmailClose').addEventListener('click', function() { closeModal('modalEmail'); });
+            document.getElementById('btnCancelarEmail').addEventListener('click', function() { closeModal('modalEmail'); });
+
+            // Search
+            document.getElementById('searchInput').addEventListener('input', renderGroups);
+
+            // Init
+            loadFromStorage();
+            renderGroups();
+        })();
+    </script>
+</body>
+</html>

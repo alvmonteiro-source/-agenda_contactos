@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registo de Acessos</title>
+    <base href="./">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif; min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; position: relative; background: #f0f0f0; overflow-y: scroll; }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png");
+            background-size: 150px;
+            background-repeat: repeat;
+            opacity: 0.08;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+        .container { max-width: 100%; margin: 0 auto; }
+        h1 { color: #000; text-align: center; margin-bottom: 40px; font-size: 32px; }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 8px 15px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e1e8ed;
+            flex-shrink: 0;
+        }
+
+        .nav-links a {
+            color: #000;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+            background: rgba(255,255,255,0.7);
+        }
+
+        .nav-links a:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0,0,0,0.15); }
+        .nav-links a.active { background: #2c3e50; color: #fff; }
+
+        .section {
+            background: white; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); overflow: hidden;
+            position: relative; z-index: 1; display: flex; flex-direction: column;
+        }
+
+        .toolbar { display: flex; gap: 10px; padding: 20px 30px; background: #f8f9fa; border-bottom: 1px solid #e1e8ed; flex-wrap: wrap; align-items: center; }
+        .search-box { flex: 1; min-width: 200px; }
+        .search-box input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif; transition: all 0.2s; background: white; }
+        .search-box input:focus { outline: none; border-color: #E67E22; box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1); }
+        button { padding: 10px 20px; border: none; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        button:active { transform: scale(0.98); }
+        .btn-primary { background: #E67E22; color: white; }
+        .btn-primary:hover { background: #D35400; }
+        .btn-secondary { background: #95a5a6; color: white; }
+        .btn-secondary:hover { background: #7f8c8d; }
+        .btn-success { background: #27ae60; color: white; }
+        .btn-success:hover { background: #219a52; }
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+        .stats { display: flex; gap: 20px; padding: 15px 30px; background: #f8f9fa; border-bottom: 1px solid #e1e8ed; font-size: 13px; color: #666; }
+        .stats span { font-weight: 600; color: #2c3e50; }
+        .table-container { overflow-x: auto; overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        thead { background: #003366; position: sticky; top: 0; z-index: 10; }
+        thead th { color: white; padding: 12px 15px; text-align: left; font-size: 13px; font-weight: 600; white-space: nowrap; background: #003366; }
+        tbody tr { border-bottom: 1px solid #eee; transition: background 0.15s; }
+        tbody tr:hover { background: #f0f7ff; }
+        tbody td { padding: 12px 15px; font-size: 13px; vertical-align: middle; }
+
+        .empty-state { text-align: center; padding: 60px 30px; color: #999; }
+        .empty-state .icon { font-size: 48px; margin-bottom: 15px; }
+        .empty-state h3 { font-size: 18px; color: #666; margin-bottom: 8px; }
+
+        .toast { position: fixed; bottom: 30px; right: 30px; padding: 12px 20px; border-radius: 6px; color: white; font-size: 14px; font-weight: 500; z-index: 2000; opacity: 0; transform: translateY(20px); transition: all 0.3s; }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success { background: #27ae60; }
+
+        @media (max-width: 768px) {
+            .toolbar { flex-direction: column; }
+            .stats { flex-wrap: wrap; gap: 10px; }
+            thead th, tbody td { padding: 8px 10px; font-size: 12px; }
+        }
+        .user-header {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        .header-right .card {
+            position: relative;
+            z-index: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #000;
+        }
+
+        .user-role {
+            background: linear-gradient(135deg, #D35400 0%, #E67E22 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        @media print {
+            .toolbar, .nav-links, #btnSairBottom { display: none !important; }
+            thead { background: #E67E22 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+        .main-wrapper { display: flex; align-items: flex-start; gap: 0; max-width: 100%; margin: 0 auto; width: 100%; position: relative; z-index: 1; }
+        .main-wrapper .container { flex: 1; min-width: 0; margin: 0; padding: 0; }
+        .bottom-actions { display: flex; flex-direction: column; gap: 12px; padding: 10px 20px 30px 15px; align-items: flex-start; min-width: 220px; flex-shrink: 0; width: 320px; }
+        .bottom-actions .card { width: 100%; }
+        .card {
+            background: white; padding: 12px 16px; border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: flex;
+            flex-direction: row; align-items: center; gap: 12px;
+            cursor: pointer; border: 1px solid #e1e8ed; color: #000;
+            font-family: inherit; font-size: inherit; text-align: left;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        .card .card-icon { font-size: 28px; }
+        .card .card-text h2 { color: #000; font-size: 14px; margin-bottom: 2px; }
+        .card .card-text p { color: #666; font-size: 11px; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <div class="header-left">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png" alt="ANEPC" style="width:120px;height:120px;object-fit:contain;">
+            <div style="line-height:1.2;">
+                <div style="font-size:20px;font-weight:600;color:#000;">AUTORIDADE NACIONAL DE EMERGÊNCIA E PROTEÇÃO CIVIL</div>
+                <div style="font-size:18px;font-weight:600;color:#000;">Comando Sub-Regional de Emergência e Proteção Civil Alto Minho</div>
+                <div style="font-size:16px;font-weight:700;color:#000;margin-top:4px;">LISTA TELEFÓNICA Comando Sub-Regional</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <button type="button" class="card" id="btnSairBottom" style="margin:0;padding:8px 14px;">
+                <div class="card-icon" style="font-size:20px;">&#128682;</div>
+                <div class="card-text">
+                    <h2>Sair</h2>
+                </div>
+            </button>
+            <div class="user-header" id="userHeader"></div>
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="bottom-actions">
+            <button type="button" class="card" id="btnLimpar">
+                <div class="card-icon">&#128465;</div>
+                <div class="card-text">
+                    <h2>Limpar Registo</h2>
+                    <p>Apagar todos os registos de acesso</p>
+                </div>
+            </button>
+        </div>
+
+        <div class="container">
+
+        <h1 style="font-size:24px;color:#2c3e50;text-align:center;margin:10px 0 20px 0;">REGISTO DE ACESSOS</h1>
+
+        <div class="section">
+            <div class="nav-links">
+                <a href="admin.html" onclick="safeNavigate(event, 'admin.html', 'painel')">Painel</a>
+                <a href="contactos.html" onclick="safeNavigate(event, 'contactos.html', 'contactos')">Contactos</a>
+                <a href="grupos_contacto.html" onclick="safeNavigate(event, 'grupos_contacto.html', 'contactos')">Grupos</a>
+                <a href="utilizadores.html" onclick="safeNavigate(event, 'utilizadores.html', 'utilizadores')">Utilizadores</a>
+                <a href="tipos_entidades.html" onclick="safeNavigate(event, 'tipos_entidades.html', 'contactos')">Tipos de Entidade</a>
+                <a href="permissoes.html" onclick="safeNavigate(event, 'permissoes.html', 'permissoes')">Permissões</a>
+                <a href="partilhar.html" onclick="safeNavigate(event, 'partilhar.html', 'partilhar')">Partilhar</a>
+            </div>
+            <div class="toolbar">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Pesquisar por utilizador ou email...">
+                </div>
+            </div>
+
+            <div class="stats">
+                <div>Total: <span id="totalCount">0</span> registos</div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data / Hora</th>
+                            <th>Utilizador</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+
+            <div class="empty-state" id="emptyState" style="display:none;">
+                <div class="icon">&#128203;</div>
+                <h3>Nenhum registo de acesso</h3>
+            </div>
+        </div>
+
+    </div>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="permissions.js"></script>
+    <script src="init_data.js"></script>
+    <script>
+        (function() {
+            if (!isLoggedIn()) { window.location.href = 'login.html'; return; }
+            var user = getCurrentUser();
+            if (user) {
+                document.getElementById('userHeader').innerHTML =
+                    '<span class="user-name">' + user.username + '</span>' +
+                    '<span class="user-role">' + user.role + '</span>';
+            }
+            var userPerms = getPagePermissions('acessos');
+            if (!userPerms.includes('ver')) { alert('Não tem permissão para aceder a esta página.'); window.location.href = 'admin.html'; return; }
+
+            if (!userPerms.includes('limpar')) {
+                var el = document.getElementById('btnLimpar'); if (el) el.style.display = 'none';
+            }
+
+            var btnSairBottom = document.getElementById('btnSairBottom');
+            if (btnSairBottom) btnSairBottom.addEventListener('click', function(e) {
+                e.preventDefault();
+                sessionStorage.removeItem('currentUser');
+                window.location.href = 'login.html';
+            });
+
+            function showToast(message, type) {
+                var toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.className = 'toast ' + type + ' show';
+                setTimeout(function() { toast.classList.remove('show'); }, 3000);
+            }
+
+            function escapeHtml(text) {
+                if (!text) return '';
+                var div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function render() {
+                var log = JSON.parse(localStorage.getItem('accessLog')) || [];
+                var search = document.getElementById('searchInput').value.toLowerCase();
+
+                var filtered = log.filter(function(entry) {
+                    return (entry.username && entry.username.toLowerCase().indexOf(search) !== -1) ||
+                           (entry.email && entry.email.toLowerCase().indexOf(search) !== -1);
+                });
+
+                var tbody = document.getElementById('tableBody');
+                var emptyState = document.getElementById('emptyState');
+
+                document.getElementById('totalCount').textContent = filtered.length;
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = '';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+
+                emptyState.style.display = 'none';
+                var html = '';
+                filtered.forEach(function(entry) {
+                    html += '<tr>' +
+                        '<td>' + escapeHtml(entry.datetime || 'N/D') + '</td>' +
+                        '<td><strong>' + escapeHtml(entry.username || 'N/D') + '</strong></td>' +
+                        '<td>' + escapeHtml(entry.email || 'N/D') + '</td>' +
+                    '</tr>';
+                });
+                tbody.innerHTML = html;
+            }
+
+            document.getElementById('btnLimpar').addEventListener('click', function() {
+                if (!userPerms.includes('limpar')) { alert('Sem permissão.'); return; }
+                if (!confirm('Tem a certeza que deseja limpar todo o registo de acessos?')) return;
+                localStorage.removeItem('accessLog');
+                render();
+                showToast('Registo de acessos limpo!', 'success');
+            });
+
+            document.getElementById('searchInput').addEventListener('input', render);
+
+            render();
+        })();
+    </script>
+</body>
+</html>

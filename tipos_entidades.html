@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tipos de Entidade e Siglas</title>
+    <base href="./">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif; min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; position: relative; background: #f0f0f0; overflow-y: scroll; }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png");
+            background-size: 150px;
+            background-repeat: repeat;
+            opacity: 0.08;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        h1 { color: #000; text-align: center; margin-bottom: 40px; font-size: 32px; }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 8px 15px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e1e8ed;
+            flex-shrink: 0;
+        }
+
+        .nav-links a {
+            color: #000;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+            background: rgba(255,255,255,0.7);
+        }
+
+        .nav-links a:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0,0,0,0.15); }
+        .nav-links a.active { background: #2c3e50; color: #fff; }
+
+        .section {
+            background: white; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); overflow: hidden;
+            position: relative; z-index: 1; display: flex; flex-direction: column;
+        }
+        .section h2 {
+            color: #E67E22; font-size: 22px; border-bottom: 2px solid #E67E22; padding: 20px 30px 10px;
+        }
+
+        .toolbar { display: flex; gap: 10px; padding: 20px 30px; background: #f8f9fa; border-bottom: 1px solid #e1e8ed; flex-wrap: wrap; align-items: center; }
+        .search-box { flex: 1; min-width: 200px; }
+        .search-box input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif; transition: all 0.2s; background: white; }
+        .search-box input:focus { outline: none; border-color: #E67E22; box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1); }
+        .filter-group { display: flex; gap: 8px; align-items: center; }
+        .filter-group label { font-size: 13px; font-weight: 500; color: #555; white-space: nowrap; }
+        .filter-group select { padding: 8px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif; background: white; }
+        .filter-group select:focus { outline: none; border-color: #E67E22; }
+        button { padding: 10px 20px; border: none; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        button:active { transform: scale(0.98); }
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+        .stats { display: flex; gap: 20px; padding: 15px 30px; background: #f8f9fa; border-bottom: 1px solid #e1e8ed; font-size: 13px; color: #666; }
+        .stats span { font-weight: 600; color: #2c3e50; }
+        .table-container { overflow-x: auto; overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        thead { background: #003366; position: sticky; top: 0; z-index: 10; }
+        thead th { color: white; padding: 12px 15px; text-align: left; font-size: 13px; font-weight: 600; white-space: nowrap; background: #003366; }
+        tbody tr { border-bottom: 1px solid #eee; transition: background 0.15s; }
+        tbody tr:hover { background: #f0f7ff; }
+        tbody td { padding: 12px 15px; font-size: 13px; vertical-align: middle; }
+        .actions-cell { white-space: nowrap; }
+        .actions-cell button { margin-right: 4px; }
+        .empty-state { text-align: center; padding: 60px 30px; color: #999; }
+        .empty-state h3 { font-size: 18px; color: #666; margin-bottom: 8px; }
+        .empty-state p { font-size: 14px; }
+        .pagination { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: #f8f9fa; border-top: 1px solid #e1e8ed; font-size: 13px; color: #666; }
+        .pagination-buttons { display: flex; gap: 4px; }
+        .pagination-buttons button { padding: 6px 12px; min-width: 36px; }
+        .page-btn { background: white; color: #000; border: 1px solid #ddd; }
+        .page-btn:hover { background: #f0f0f0; }
+        .page-btn.active { background: #E67E22; color: white; border-color: #E67E22; }
+        .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .btn-edit { background: #2980b9; color: white; margin-right: 4px; }
+        .btn-edit:hover { background: #2471a3; }
+        .btn-delete { background: #CB4335; color: white; }
+        .btn-delete:hover { background: #a93226; }
+
+        .badge-tipo { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+        .badge-tipo-padrao { background: #e8f4fd; color: #2980b9; }
+        .badge-tipo-outra { background: #FDEBD0; color: #E67E22; }
+
+        .sigla { font-weight: 700; color: #2980b9; font-size: 14px; }
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; justify-content: center; align-items: center; }
+        .modal-overlay.active { display: flex; }
+        .modal-box { background: white; border-radius: 10px; padding: 30px; width: 400px; max-width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        .modal-box h3 { margin-bottom: 20px; color: #2c3e50; font-size: 18px; }
+        .modal-box label { display: block; margin-bottom: 5px; font-weight: 600; color: #2c3e50; font-size: 14px; }
+        .modal-box input, .modal-box select { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; margin-bottom: 15px; font-family: inherit; }
+        .modal-box input:focus, .modal-box select:focus { outline: none; border-color: #3498db; }
+        .modal-box .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 10px; }
+        .modal-box .btn-save { background: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .modal-box .btn-save:hover { background: #219a52; }
+        .modal-box .btn-cancel { background: #95a5a6; color: white; border: none; padding: 10px 20px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .modal-box .btn-cancel:hover { background: #7f8c8d; }
+
+        .btn-add-row { width: 100%; padding: 8px; background: #3498db; color: white; border: none; border-radius: 4px; font-size: 13px; cursor: pointer; margin-bottom: 15px; transition: background 0.2s; }
+        .btn-add-row:hover { background: #2980b9; }
+
+        .depto-block { background: #f8f9fa; border: 1px solid #e1e8ed; border-radius: 6px; padding: 12px; margin-bottom: 10px; }
+        .depto-block-header { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+        .depto-block-header input { flex: 1; margin-bottom: 0; }
+        .depto-block-header .btn-remove-row { background: #e74c3c; color: white; border: none; border-radius: 4px; padding: 8px 12px; cursor: pointer; font-size: 14px; transition: background 0.2s; flex-shrink: 0; }
+        .depto-block-header .btn-remove-row:hover { background: #c0392b; }
+
+        .cargos-inside { margin-top: 8px; padding-left: 15px; border-left: 2px solid #3498db; }
+        .cargos-inside-label { font-size: 12px; font-weight: 600; color: #555; margin-bottom: 6px; }
+        .row-item { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
+        .row-item input { flex: 1; margin-bottom: 0; }
+        .row-item .btn-remove-row { background: #e74c3c; color: white; border: none; border-radius: 4px; padding: 8px 12px; cursor: pointer; font-size: 14px; transition: background 0.2s; flex-shrink: 0; }
+        .row-item .btn-remove-row:hover { background: #c0392b; }
+        .btn-add-cargo { width: 100%; padding: 6px; background: #27ae60; color: white; border: none; border-radius: 4px; font-size: 12px; cursor: pointer; margin-top: 4px; transition: background 0.2s; }
+        .btn-add-cargo:hover { background: #219a52; }
+
+        @media (max-width: 768px) {
+            .toolbar { flex-direction: column; }
+            .filter-group { flex-wrap: wrap; }
+            .stats { flex-wrap: wrap; gap: 10px; }
+            thead th, tbody td { padding: 8px 10px; font-size: 12px; }
+            .btn-sm { padding: 5px 8px; font-size: 11px; }
+        }
+        .user-header {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        .header-right .card {
+            position: relative;
+            z-index: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #000;
+        }
+
+        .user-role {
+            background: linear-gradient(135deg, #D35400 0%, #E67E22 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+            gap: 15px;
+        }
+
+        @media print {
+            .toolbar, .pagination, .actions-cell, .nav-links, #btnSairBottom { display: none !important; }
+            thead { background: #003366 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            thead th { background: #003366 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+        .main-wrapper { display: flex; align-items: flex-start; gap: 0; max-width: 100%; margin: 0 auto; width: 100%; position: relative; z-index: 1; }
+        .main-wrapper .container { flex: 1; min-width: 0; margin: 0; padding: 0; }
+        .bottom-actions { display: flex; flex-direction: column; gap: 12px; padding: 10px 20px 30px 15px; align-items: flex-start; min-width: 220px; flex-shrink: 0; width: 320px; }
+        .bottom-actions .card { width: 100%; }
+        .card {
+            background: white; padding: 12px 16px; border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: flex;
+            flex-direction: row; align-items: center; gap: 12px;
+            cursor: pointer; border: 1px solid #e1e8ed; color: #000;
+            font-family: inherit; font-size: inherit; text-align: left;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        .card .card-icon { font-size: 28px; }
+        .card .card-text h2 { color: #000; font-size: 14px; margin-bottom: 2px; }
+        .card .card-text p { color: #666; font-size: 11px; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <div class="header-left">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png" alt="ANEPC" style="width:120px;height:120px;object-fit:contain;">
+            <div style="line-height:1.2;">
+                <div style="font-size:20px;font-weight:600;color:#000;">AUTORIDADE NACIONAL DE EMERGÊNCIA E PROTEÇÃO CIVIL</div>
+                <div style="font-size:18px;font-weight:600;color:#000;">Comando Sub-Regional de Emergência e Proteção Civil Alto Minho</div>
+                <div style="font-size:16px;font-weight:700;color:#000;margin-top:4px;">LISTA TELEFÓNICA Comando Sub-Regional</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <button type="button" class="card" id="btnSairBottom" style="margin:0;padding:8px 14px;">
+                <div class="card-icon" style="font-size:20px;">&#128682;</div>
+                <div class="card-text">
+                    <h2>Sair</h2>
+                </div>
+            </button>
+            <div class="user-header" id="userHeader"></div>
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="bottom-actions">
+            <button type="button" class="card" onclick="openModal()">
+                <div class="card-icon">&#128196;</div>
+                <div class="card-text">
+                    <h2>Criar Novo Tipo</h2>
+                    <p>Adicionar novo tipo de entidade</p>
+                </div>
+            </button>
+        </div>
+
+        <div class="container">
+
+        <h1 style="font-size:24px;color:#2c3e50;text-align:center;margin:10px 0 20px 0;">TIPOS DE ENTIDADE E SIGLAS</h1>
+
+        <div class="section">
+            <div class="nav-links">
+                <a href="admin.html">Painel</a>
+                <a href="contactos.html">Contactos</a>
+                <a href="grupos_contacto.html">Grupos</a>
+                <a href="utilizadores.html">Utilizadores</a>
+                <a href="acessos.html">Acessos</a>
+                <a href="permissoes.html">Permissões</a>
+                <a href="partilhar.html">Partilhar</a>
+            </div>
+            <div class="toolbar" style="border-top:none;">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Pesquisar por categoria, tipo ou sigla...">
+                </div>
+                <div class="filter-group">
+                    <label for="filterCategoria">Categoria:</label>
+                    <select id="filterCategoria">
+                        <option value="">Todas</option>
+                        <option value="Tipo de Entidade">Tipo de Entidade</option>
+                        <option value="Outra Entidade">Outra Entidade</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div>Total: <span id="totalCount">0</span> <span id="statsLabel">registos</span></div>
+                <div>Visiveis: <span id="visibleCount">0</span></div>
+            </div>
+
+            <div class="table-container">
+                <table id="tiposTable">
+                    <thead>
+                        <tr>
+                            <th style="width:140px;">Categoria</th>
+                            <th style="width:160px;">Tipo de Entidade</th>
+                            <th style="width:80px;">Sigla</th>
+                            <th>Departamentos / Cargos</th>
+                            <th style="text-align:center;width:120px;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyAll"></tbody>
+                </table>
+            </div>
+
+            <div class="empty-state" id="emptyState" style="display:none;">
+                <h3>Nenhum tipo de entidade encontrado</h3>
+                <p>Adicione um novo tipo ou ajuste os filtros de pesquisa.</p>
+            </div>
+
+            <div class="pagination">
+                <div id="paginationInfo">A mostrar 0 de 0 registos</div>
+                <div class="pagination-buttons" id="paginationButtons"></div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    <div class="modal-overlay" id="modalEnt">
+        <div class="modal-box" style="max-height:80vh;overflow-y:auto;">
+            <h3 id="modalEntTitle">Novo Tipo de Entidade</h3>
+            <label for="inputCategoria">Categoria</label>
+            <select id="inputCategoria">
+                <option value="Tipo de Entidade">Tipo de Entidade</option>
+                <option value="Outra Entidade">Outra Entidade</option>
+            </select>
+            <label for="inputTipoEnt">Tipo de Entidade</label>
+            <input type="text" id="inputTipoEnt" placeholder="Ex: Camara Municipal">
+            <label for="inputSiglaEnt">Sigla</label>
+            <input type="text" id="inputSiglaEnt" placeholder="Ex: CM" maxlength="10">
+
+            <label>Departamentos</label>
+            <div id="departamentosContainer"></div>
+            <button type="button" class="btn-add-row" onclick="addDepartamentoBlock()">+ Adicionar Departamento</button>
+
+            <div class="modal-actions" style="margin-top:20px;">
+                <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+                <button class="btn-save" onclick="saveEntidade()">Guardar</button>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+        </div>
+    </div>
+
+    <script src="permissions.js"></script>
+    <script>
+        if (!isLoggedIn()) {
+            window.location.href = 'login.html';
+        } else {
+            var user = getCurrentUser();
+            if (user) {
+                document.getElementById('userHeader').innerHTML =
+                    '<span class="user-name">' + user.username + '</span>' +
+                    '<span class="user-role">' + user.role + '</span>';
+            }
+            document.getElementById('btnSairBottom').addEventListener('click', function(e) {
+                e.preventDefault();
+                sessionStorage.removeItem('currentUser');
+                window.location.href = 'login.html';
+            });
+        }
+
+        var STORAGE_KEY_TIPOS = 'tiposEntidade';
+        var STORAGE_KEY_OUTRAS = 'outrasEntidades';
+        var editingKey = '';
+        var editingIdx = -1;
+        var currentPage = 1;
+        var ROWS_PER_PAGE = 10;
+
+        var defaultTipos = [
+            { tipo: 'Camara Municipal', sigla: 'CM', departamentos: [] },
+            { tipo: 'Junta de Freguesia', sigla: 'JF', departamentos: [] },
+            { tipo: 'Bombeiros', sigla: 'BM', departamentos: [] },
+            { tipo: 'Autoridade', sigla: 'AUTH', departamentos: [] },
+            { tipo: 'Instituicao de Ensino', sigla: 'IE', departamentos: [] },
+            { tipo: 'Hospital / Centro de Saude', sigla: 'H/CS', departamentos: [] },
+            { tipo: 'Empresa Publica', sigla: 'EP', departamentos: [] },
+            { tipo: 'IPSS', sigla: 'IPSS', departamentos: [] },
+            { tipo: 'Associacao', sigla: 'ASS', departamentos: [] },
+            { tipo: 'Fundacao', sigla: 'FUN', departamentos: [] },
+            { tipo: 'Cooperativa', sigla: 'COOP', departamentos: [] },
+            { tipo: 'Orgaos de comunicacao', sigla: 'OC', departamentos: [] }
+        ];
+
+        var defaultOutras = [
+            { tipo: 'Outro Servico', sigla: 'OS', departamentos: [] },
+            { tipo: 'Organizacao', sigla: 'ORG', departamentos: [] }
+        ];
+
+        function getList(key, defaults) {
+            var saved = localStorage.getItem(key);
+            if (saved) return JSON.parse(saved);
+            localStorage.setItem(key, JSON.stringify(defaults));
+            return defaults.slice();
+        }
+
+        function saveList(key, arr) {
+            localStorage.setItem(key, JSON.stringify(arr));
+            window.dispatchEvent(new Event('tiposEntidadeUpdated'));
+        }
+
+        function refreshTiposPage() {
+            currentPage = 1;
+            renderTabela();
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function getAllItems() {
+            var tipos = getList(STORAGE_KEY_TIPOS, defaultTipos);
+            var outras = getList(STORAGE_KEY_OUTRAS, defaultOutras);
+            var all = [];
+            tipos.forEach(function(t, i) {
+                all.push({ categoria: 'Tipo de Entidade', tipo: t.tipo, sigla: t.sigla, departamentos: t.departamentos || [], key: STORAGE_KEY_TIPOS, idx: i });
+            });
+            outras.forEach(function(t, i) {
+                all.push({ categoria: 'Outra Entidade', tipo: t.tipo, sigla: t.sigla, departamentos: t.departamentos || [], key: STORAGE_KEY_OUTRAS, idx: i });
+            });
+            return all;
+        }
+
+        function getFilteredItems() {
+            var all = getAllItems();
+            var search = document.getElementById('searchInput').value.toLowerCase();
+            var filterCat = document.getElementById('filterCategoria').value;
+
+            return all.filter(function(item) {
+                var deptoCargoMatch = item.departamentos.some(function(d) {
+                    var deptoMatch = d.nome.toLowerCase().indexOf(search) >= 0 || d.sigla.toLowerCase().indexOf(search) >= 0;
+                    var cargoMatch = (d.cargos || []).some(function(c) {
+                        return c.nome.toLowerCase().indexOf(search) >= 0 || c.sigla.toLowerCase().indexOf(search) >= 0;
+                    });
+                    return deptoMatch || cargoMatch;
+                });
+                var matchSearch = !search || 
+                    item.categoria.toLowerCase().indexOf(search) >= 0 || 
+                    item.tipo.toLowerCase().indexOf(search) >= 0 || 
+                    item.sigla.toLowerCase().indexOf(search) >= 0 ||
+                    deptoCargoMatch;
+                var matchCat = !filterCat || item.categoria === filterCat;
+                return matchSearch && matchCat;
+            });
+        }
+
+        function renderTabela() {
+            var filtered = getFilteredItems();
+            var tbody = document.getElementById('tbodyAll');
+            var html = '';
+
+            var totalPages = Math.ceil(filtered.length / ROWS_PER_PAGE) || 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+            var start = (currentPage - 1) * ROWS_PER_PAGE;
+            var pageItems = filtered.slice(start, start + ROWS_PER_PAGE);
+
+            document.getElementById('totalCount').textContent = filtered.length;
+            document.getElementById('visibleCount').textContent = pageItems.length;
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                document.getElementById('emptyState').style.display = 'block';
+                document.getElementById('paginationInfo').textContent = 'A mostrar 0 de 0 registos';
+                document.getElementById('paginationButtons').innerHTML = '';
+                return;
+            }
+
+            document.getElementById('emptyState').style.display = 'none';
+
+            pageItems.forEach(function(item) {
+                var isOutra = item.key === STORAGE_KEY_OUTRAS;
+                var badgeClass = isOutra ? 'badge-tipo-outra' : 'badge-tipo-padrao';
+
+                var deptosCargosText = item.departamentos.map(function(d) {
+                    var cargos = (d.cargos || []).map(function(c) { return c.sigla ? c.nome + ' (' + c.sigla + ')' : c.nome; }).join(', ');
+                    var deptoText = d.sigla ? d.nome + ' (' + d.sigla + ')' : d.nome;
+                    if (cargos) deptoText += ': ' + cargos;
+                    return deptoText;
+                }).join(' | ');
+
+                html += '<tr>';
+                html += '<td><span class="badge-tipo ' + badgeClass + '">' + escapeHtml(item.categoria) + '</span></td>';
+                html += '<td>' + escapeHtml(item.tipo) + '</td>';
+                html += '<td class="sigla">' + escapeHtml(item.sigla) + '</td>';
+                html += '<td style="max-width:300px;word-wrap:break-word;">' + escapeHtml(deptosCargosText) + '</td>';
+                html += '<td class="actions-cell" style="text-align:center;">';
+                html += '<button class="btn-edit btn-sm" onclick="editEntidade(\'' + item.key + '\',' + item.idx + ')" title="Editar">&#9998; Editar</button>';
+                html += '<button class="btn-delete btn-sm" onclick="deleteEntidade(\'' + item.key + '\',' + item.idx + ')" title="Apagar">&#10006; Apagar</button>';
+                html += '</td></tr>';
+            });
+
+            tbody.innerHTML = html;
+
+            var from = start + 1;
+            var to = Math.min(start + ROWS_PER_PAGE, filtered.length);
+            document.getElementById('paginationInfo').textContent = 'A mostrar ' + from + '-' + to + ' de ' + filtered.length + ' registos';
+
+            var pagHtml = '';
+            pagHtml += '<button class="page-btn" onclick="goToPage(' + (currentPage - 1) + ')" ' + (currentPage === 1 ? 'disabled' : '') + '>&laquo;</button>';
+            for (var p = 1; p <= totalPages; p++) {
+                pagHtml += '<button class="page-btn' + (p === currentPage ? ' active' : '') + '" onclick="goToPage(' + p + ')">' + p + '</button>';
+            }
+            pagHtml += '<button class="page-btn" onclick="goToPage(' + (currentPage + 1) + ')" ' + (currentPage === totalPages ? 'disabled' : '') + '>&raquo;</button>';
+            document.getElementById('paginationButtons').innerHTML = pagHtml;
+        }
+
+        function goToPage(page) {
+            var filtered = getFilteredItems();
+            var totalPages = Math.ceil(filtered.length / ROWS_PER_PAGE) || 1;
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderTabela();
+        }
+
+        function openModal(key, idx) {
+            editingKey = (typeof key !== 'undefined') ? key : '';
+            editingIdx = (typeof idx !== 'undefined') ? idx : -1;
+            var title = document.getElementById('modalEntTitle');
+            var inputCat = document.getElementById('inputCategoria');
+            var inputTipo = document.getElementById('inputTipoEnt');
+            var inputSigla = document.getElementById('inputSiglaEnt');
+
+            document.getElementById('departamentosContainer').innerHTML = '';
+
+            if (editingIdx >= 0) {
+                var list = getList(editingKey, []);
+                var item = list[editingIdx];
+                title.textContent = 'Editar Tipo de Entidade';
+                inputCat.value = editingKey === STORAGE_KEY_OUTRAS ? 'Outra Entidade' : 'Tipo de Entidade';
+                inputCat.disabled = true;
+                inputTipo.value = item.tipo;
+                inputSigla.value = item.sigla;
+
+                var deptos = item.departamentos || [];
+                deptos.forEach(function(d) {
+                    addDepartamentoBlock(d.nome, d.sigla, d.cargos || []);
+                });
+            } else {
+                title.textContent = 'Novo Tipo de Entidade';
+                inputCat.value = 'Tipo de Entidade';
+                inputCat.disabled = false;
+                inputTipo.value = '';
+                inputSigla.value = '';
+            }
+
+            document.getElementById('modalEnt').classList.add('active');
+            inputTipo.focus();
+        }
+
+        function closeModal() {
+            document.getElementById('modalEnt').classList.remove('active');
+            editingKey = '';
+            editingIdx = -1;
+            document.getElementById('inputCategoria').disabled = false;
+            document.getElementById('departamentosContainer').innerHTML = '';
+        }
+
+        function addDepartamentoBlock(deptNome, deptSigla, cargos) {
+            var container = document.getElementById('departamentosContainer');
+            var block = document.createElement('div');
+            block.className = 'depto-block';
+
+            var cargosHtml = '';
+            (cargos || []).forEach(function(c) {
+                cargosHtml += '<div class="row-item">' +
+                    '<input type="text" placeholder="Nome do Cargo / Função" value="' + escapeHtml(c.nome || '') + '">' +
+                    '<input type="text" placeholder="Sigla" style="max-width:80px;" maxlength="10" value="' + escapeHtml(c.sigla || '') + '">' +
+                    '<button type="button" class="btn-remove-row" onclick="this.parentElement.remove()">X</button>' +
+                    '</div>';
+            });
+
+            block.innerHTML = '<div class="depto-block-header">' +
+                '<input type="text" placeholder="Nome do Departamento" value="' + escapeHtml(deptNome || '') + '">' +
+                '<input type="text" placeholder="Sigla" style="max-width:80px;" maxlength="10" value="' + escapeHtml(deptSigla || '') + '">' +
+                '<button type="button" class="btn-remove-row" onclick="this.closest(\'.depto-block\').remove()">X</button>' +
+                '</div>' +
+                '<div class="cargos-inside">' +
+                '<div class="cargos-inside-label">Cargos / Funções:</div>' +
+                '<div class="cargos-list">' + cargosHtml + '</div>' +
+                '<button type="button" class="btn-add-cargo" onclick="addCargoRowInside(this)">+ Adicionar Cargo / Função</button>' +
+                '</div>';
+
+            container.appendChild(block);
+        }
+
+        function addCargoRowInside(btn) {
+            var cargosList = btn.previousElementSibling;
+            var row = document.createElement('div');
+            row.className = 'row-item';
+            row.innerHTML = '<input type="text" placeholder="Nome do Cargo / Função">' +
+                            '<input type="text" placeholder="Sigla" style="max-width:80px;" maxlength="10">' +
+                            '<button type="button" class="btn-remove-row" onclick="this.parentElement.remove()">X</button>';
+            cargosList.appendChild(row);
+        }
+
+        function collectDepartamentos() {
+            var blocks = document.getElementById('departamentosContainer').querySelectorAll('.depto-block');
+            var result = [];
+            blocks.forEach(function(block) {
+                var headerInputs = block.querySelector('.depto-block-header').querySelectorAll('input');
+                var nome = headerInputs[0].value.trim();
+                var sigla = headerInputs[1].value.trim();
+                if (nome) {
+                    var cargosRows = block.querySelectorAll('.cargos-list .row-item');
+                    var cargos = [];
+                    cargosRows.forEach(function(row) {
+                        var cInputs = row.querySelectorAll('input');
+                        var cNome = cInputs[0].value.trim();
+                        var cSigla = cInputs[1].value.trim();
+                        if (cNome) {
+                            cargos.push({ nome: cNome, sigla: cSigla });
+                        }
+                    });
+                    result.push({ nome: nome, sigla: sigla, cargos: cargos });
+                }
+            });
+            return result;
+        }
+
+        function saveEntidade() {
+            var cat = document.getElementById('inputCategoria').value;
+            var tipo = document.getElementById('inputTipoEnt').value.trim();
+            var sigla = document.getElementById('inputSiglaEnt').value.trim();
+            var departamentos = collectDepartamentos();
+
+            if (!tipo || !sigla) {
+                alert('Preencha todos os campos!');
+                return;
+            }
+
+            var targetKey = editingIdx >= 0 ? editingKey : (cat === 'Outra Entidade' ? STORAGE_KEY_OUTRAS : STORAGE_KEY_TIPOS);
+
+            var list = getList(targetKey, []);
+
+            var duplicate = list.some(function(t, i) {
+                return i !== editingIdx && t.tipo.toLowerCase() === tipo.toLowerCase();
+            });
+            if (duplicate) {
+                alert('Ja existe um tipo de entidade com esse nome!');
+                return;
+            }
+
+            if (editingIdx >= 0) {
+                list[editingIdx] = { tipo: tipo, sigla: sigla, departamentos: departamentos };
+            } else {
+                list.push({ tipo: tipo, sigla: sigla, departamentos: departamentos });
+            }
+
+            saveList(targetKey, list);
+            renderTabela();
+            closeModal();
+        }
+
+        function editEntidade(key, idx) {
+            openModal(key, idx);
+        }
+
+        function deleteEntidade(key, idx) {
+            var list = getList(key, []);
+            if (confirm('Tem a certeza que deseja apagar o tipo "' + list[idx].tipo + '"?')) {
+                list.splice(idx, 1);
+                saveList(key, list);
+                renderTabela();
+            }
+        }
+
+        document.getElementById('modalEnt').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.getElementById('searchInput').addEventListener('input', function() {
+            currentPage = 1;
+            renderTabela();
+        });
+
+        document.getElementById('filterCategoria').addEventListener('change', function() {
+            currentPage = 1;
+            renderTabela();
+        });
+
+        window.addEventListener('storage', function(e) {
+            if (e.key === STORAGE_KEY_TIPOS || e.key === STORAGE_KEY_OUTRAS) {
+                refreshTiposPage();
+            }
+        });
+
+        window.addEventListener('tiposEntidadeUpdated', refreshTiposPage);
+
+        renderTabela();
+    </script>
+</body>
+</html>

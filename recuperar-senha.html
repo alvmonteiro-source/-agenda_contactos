@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Palavra-passe</title>
+    <base href="./">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: #f0f0f0;
+            overflow-y: scroll;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png");
+            background-size: 150px;
+            background-repeat: repeat;
+            opacity: 0.08;
+            z-index: 0;
+        }
+
+        body > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            padding-top: 200px;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #000;
+            font-size: 26px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #000;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 6px;
+            font-size: 16px;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #E67E22;
+            box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group.error input {
+            border-color: #e74c3c;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #D35400 0%, #E67E22 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(230, 126, 34, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #E67E22;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 50px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            color: #666;
+            padding: 5px;
+        }
+
+        .toggle-password:hover {
+            color: #E67E22;
+        }
+    </style>
+</head>
+<body>
+    <div style="position:fixed;top:15px;left:20px;z-index:9999;display:flex;align-items:center;gap:10px;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png" alt="ANEPC" style="width:150px;height:150px;object-fit:contain;">
+        <div style="line-height:1.2;">
+            <div style="font-size:20px;font-weight:600;color:#000;">AUTORIDADE NACIONAL DE EMERGÊNCIA E PROTEÇÃO CIVIL</div>
+            <div style="font-size:18px;font-weight:600;color:#000;">Comando Sub-Regional de Emergência e Proteção Civil Alto Minho</div>
+            <div style="font-size:16px;font-weight:700;color:#000;margin-top:4px;">LISTA TELEFÓNICA Comando Sub-Regional</div>
+        </div>
+    </div>
+    <div class="container">
+        <!-- Step 1: Verify Identity -->
+        <div class="step active" id="step1">
+            <div class="header">
+                <h1>Recuperar Palavra-passe</h1>
+                <p>Insira os seus dados para verificar a sua identidade</p>
+            </div>
+
+            <form id="verifyForm">
+                <div class="form-group">
+                    <label for="username">Utilizador</label>
+                    <input type="text" id="username" name="username" placeholder="O seu nome de utilizador" required>
+                    <span class="error-message">Utilizador não encontrado</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="O seu e-mail" required>
+                    <span class="error-message">E-mail não corresponde ao utilizador</span>
+                </div>
+
+                <button type="submit" class="btn">Confirmar</button>
+            </form>
+
+            <a href="login.html" class="back-link">&larr; Voltar ao Login</a>
+        </div>
+
+        <!-- Step 2: New Password -->
+        <div class="step" id="step2">
+            <div class="header">
+                <h1>Nova Palavra-passe</h1>
+                <p>Crie uma nova palavra-passe para a sua conta</p>
+            </div>
+
+            <div class="success-message" id="successMsg">
+                Identidade verificada com sucesso!
+            </div>
+
+            <form id="newPasswordForm">
+                <div class="form-group">
+                    <label for="newPassword">Nova Palavra-passe</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="newPassword" name="newPassword" placeholder="Nova palavra-passe" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('newPassword')">&#128065;</button>
+                    </div>
+                    <span class="error-message">A palavra-passe deve ter pelo menos 6 caracteres</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmação de Nova Palavra-passe</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirme a nova palavra-passe" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">&#128065;</button>
+                    </div>
+                    <span class="error-message">As palavras-passe não coincidem</span>
+                </div>
+
+                <button type="submit" class="btn">OK</button>
+            </form>
+
+            <a href="login.html" class="back-link">&larr; Voltar ao Login</a>
+        </div>
+
+        <!-- Step 3: Success -->
+        <div class="step" id="step3">
+            <div class="header">
+                <h1>Sucesso!</h1>
+                <p>A sua palavra-passe foi alterada com sucesso</p>
+            </div>
+
+            <div class="success-message show">
+                Pode agora iniciar sessão com a sua nova palavra-passe.
+            </div>
+
+            <a href="login.html" class="btn" style="text-align: center; text-decoration: none; display: block;">Ir para o Login</a>
+        </div>
+    </div>
+
+    <script src="init_data.js"></script>
+    <script>
+        // Initialize localStorage with default users if empty
+        function initUsers() {
+            if (!localStorage.getItem('users')) {
+                const defaultUsers = [
+                    { username: 'joao_silva', email: 'joao@email.com', password: '123456', status: 'active' },
+                    { username: 'maria_santos', email: 'maria@email.com', password: '123456', status: 'active' },
+                    { username: 'pedro_costa', email: 'pedro@email.com', password: '123456', status: 'inactive' },
+                    { username: 'ana_oliveira', email: 'ana@email.com', password: '123456', status: 'active' }
+                ];
+                localStorage.setItem('users', JSON.stringify(defaultUsers));
+            }
+        }
+
+        // Get users from localStorage
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('users')) || [];
+        }
+
+        // Save users to localStorage
+        function saveUsers(users) {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        let verifiedUsername = '';
+
+        // Step 1: Verify identity
+        document.getElementById('verifyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+
+            const username = document.getElementById('username');
+            const email = document.getElementById('email');
+
+            const users = getUsers();
+
+            // Check if username exists and email matches
+            const user = users.find(u => 
+                u.username.toLowerCase() === username.value.trim().toLowerCase() &&
+                u.email.toLowerCase() === email.value.trim().toLowerCase()
+            );
+
+            if (!user) {
+                // Check if username exists but email is wrong
+                const usernameExists = users.some(u => 
+                    u.username.toLowerCase() === username.value.trim().toLowerCase()
+                );
+
+                if (usernameExists) {
+                    email.parentElement.classList.add('error');
+                    email.parentElement.querySelector('.error-message').textContent = 'E-mail não corresponde ao utilizador';
+                } else {
+                    username.parentElement.classList.add('error');
+                    username.parentElement.querySelector('.error-message').textContent = 'Utilizador não encontrado';
+                }
+                isValid = false;
+            } else {
+                username.parentElement.classList.remove('error');
+                email.parentElement.classList.remove('error');
+                verifiedUsername = user.username;
+            }
+
+            if (isValid) {
+                document.getElementById('step1').classList.remove('active');
+                document.getElementById('step2').classList.add('active');
+                document.getElementById('successMsg').classList.add('show');
+            }
+        });
+
+        // Step 2: Set new password
+        document.getElementById('newPasswordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+
+            const newPassword = document.getElementById('newPassword');
+            const confirmPassword = document.getElementById('confirmPassword');
+
+            // Validate new password
+            if (newPassword.value.length < 6) {
+                newPassword.parentElement.parentElement.classList.add('error');
+                isValid = false;
+            } else {
+                newPassword.parentElement.parentElement.classList.remove('error');
+            }
+
+            // Validate password confirmation
+            if (newPassword.value !== confirmPassword.value) {
+                confirmPassword.parentElement.parentElement.classList.add('error');
+                isValid = false;
+            } else {
+                confirmPassword.parentElement.parentElement.classList.remove('error');
+            }
+
+            if (isValid) {
+                // Update password in localStorage
+                const users = getUsers();
+                const user = users.find(u => u.username === verifiedUsername);
+                if (user) {
+                    user.password = newPassword.value;
+                    saveUsers(users);
+                }
+
+                document.getElementById('step2').classList.remove('active');
+                document.getElementById('step3').classList.add('active');
+                // Redirect to login after 2 seconds
+                setTimeout(function() {
+                    window.location.href = 'login.html';
+                }, 2000);
+            }
+        });
+
+        // Toggle password visibility
+        function togglePassword(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleBtn = passwordInput.parentElement.querySelector('.toggle-password');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.innerHTML = '&#128065;';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.innerHTML = '&#128065;';
+            }
+        }
+
+        // Remove error on input
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', function() {
+                this.parentElement.parentElement.classList.remove('error');
+                this.parentElement.classList.remove('error');
+            });
+        });
+
+        // Initialize users on page load
+        loadDadosFromJSON(function() { initUsers(); });
+    </script>
+</body>
+</html>

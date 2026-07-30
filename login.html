@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <base href="./">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: #f0f0f0;
+            overflow: scroll;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png");
+            background-size: 150px;
+            background-repeat: repeat;
+            opacity: 0.08;
+            z-index: 0;
+        }
+
+        body > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .login-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 60px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .anepc-logo {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+
+        .anepc-footer {
+            text-align: center;
+            color: #000;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .anepc-title {
+            font-size: 20px;
+        }
+
+        .anepc-contactos {
+            position: fixed;
+            left: 20px;
+            bottom: 40px;
+            color: #000;
+            font-size: 14px;
+            line-height: 1.8;
+            z-index: 1;
+        }
+
+        .anepc-contactos p {
+            margin: 0;
+        }
+
+        .login-header h1 {
+            color: #000;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #000;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 6px;
+            font-size: 16px;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #E87722;
+            box-shadow: 0 0 0 3px rgba(232, 119, 34, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .remember-forgot label {
+            display: flex;
+            align-items: center;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .remember-forgot input[type="checkbox"] {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .remember-forgot a {
+            color: #E87722;
+            text-decoration: none;
+        }
+
+        .remember-forgot a:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #003087;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 48, 135, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .signup-link a {
+            color: #E87722;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #E87722;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group.error input {
+            border-color: #E87722;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 50px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 35px;
+            color: #666;
+            padding: 5px;
+        }
+
+        .toggle-password:hover {
+            color: #E87722;
+        }
+
+        .eye-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .eye-wrapper.hidden::after {
+            content: '';
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            width: 3px;
+            height: 35px;
+            background: #666;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            transform-origin: center;
+        }
+        .last-update-badge {
+            position: fixed;
+            top: 14px;
+            right: 18px;
+            background: rgba(0, 100, 0, 0.18);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 100, 0, 0.35);
+            border-radius: 20px;
+            padding: 5px 14px;
+            font-size: 16px;
+            color: #006400;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+            letter-spacing: 0.3px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            z-index: 1000;
+            user-select: none;
+            pointer-events: none;
+            text-align: center;
+        }
+
+        .last-update-badge span.label {
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        .last-update-badge span.date {
+            font-weight: 600;
+            margin-left: 4px;
+            display: block;
+            font-size: 15px;
+        }
+
+        .last-update-badge span.time {
+            font-weight: 600;
+            display: block;
+            font-size: 15px;
+        }
+
+        @media (max-width: 1200px) {
+            .anepc-contactos { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                width: 85%;
+                padding: 20px;
+            }
+            .anepc-logo {
+                width: 90px;
+                height: 90px;
+            }
+            .login-header h1 {
+                font-size: 22px;
+            }
+            .anepc-footer {
+                font-size: 14px;
+            }
+            .anepc-title {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                width: 90%;
+                padding: 15px;
+            }
+            .anepc-logo {
+                width: 70px;
+                height: 70px;
+            }
+            .login-header h1 {
+                font-size: 18px;
+            }
+            .anepc-footer {
+                font-size: 11px;
+                top: 10px;
+            }
+            .anepc-title {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="last-update-badge">
+        <span class="label">Última atualização:</span>
+        <span class="date" id="backupDate">--</span>
+        <span class="time" id="backupTime">--</span>
+    </div>
+    <div class="anepc-contactos">
+        <p><strong>Morada:</strong> Rua da Bandeira, n.º 249</p>
+        <p><strong>Código Postal:</strong> 4900-560 Viana do Castelo</p>
+        <p><strong>Geral Administrativo:</strong> 258 806 610</p>
+        <p><strong>Geral Operacional:</strong> 258 806 611</p>
+        <p><strong>Email Secretaria:</strong> sec.Amin@prociv.pt</p>
+        <p><strong>Email Geral:</strong> csrepc.amin@prociv.pt</p>
+        <p><strong>Email SALOC:</strong> saloc.Amin@prociv.pt</p>
+        <p><strong>NIF:</strong> 600082490</p>
+    </div>
+    <div class="login-wrapper">
+        <div class="anepc-footer">
+            <span class="anepc-title">AUTORIDADE NACIONAL DE EMERGÊNCIA E PROTEÇÃO CIVIL</span><br>
+            Comando Sub-Regional de Emergência e Proteção Civil Alto Minho
+        </div>
+    <div class="login-container">
+        <div class="login-header">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png" alt="ANEPC Logo" class="anepc-logo">
+            <h1>Bem-vindo</h1>
+            <p>Entre na sua conta para continuar</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Utilizador</label>
+                <input type="text" id="username" name="username" placeholder="O seu nome de utilizador" required>
+                <span class="error-message">Utilizador ou palavra-passe incorretos</span>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Palavra-passe</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" name="password" placeholder="A sua palavra-passe" required>
+                    <button type="button" class="toggle-password" onclick="togglePassword()">
+                        <span class="eye-wrapper hidden">&#128065;</span>
+                    </button>
+                </div>
+                <span class="error-message">A palavra-passe deve ter pelo menos 6 caracteres</span>
+            </div>
+
+            <div class="remember-forgot">
+                <label>
+                    <input type="checkbox" name="remember"> Lembrar-me
+                </label>
+                <a href="./recuperar-senha.html">Esqueceu a palavra-passe?</a>
+            </div>
+
+            <button type="submit" class="login-btn">Entrar</button>
+        </form>
+
+
+
+        <div class="signup-link">
+            Não tem uma conta? <a href="./registar.html">Criar conta</a>
+        </div>
+    </div>
+    </div>
+
+    <script src="./init_data.js"></script>
+    <script>
+        const form = document.getElementById('loginForm');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const usernameGroup = usernameInput.closest('.form-group');
+        const passwordGroup = passwordInput.closest('.form-group');
+
+        // Default users for initialization
+        const defaultUsers = [
+            { 
+                username: 'joao_silva', email: 'joao@email.com', password: '123456', status: 'active', 
+                role: 'admin',
+                pagePermissions: {
+                    painel: ['ver', 'ver_estatisticas'],
+                    utilizadores: ['ver', 'criar', 'editar', 'apagar', 'ativar_desativar', 'ver_senhas'],
+                    acessos: ['ver', 'exportar', 'limpar', 'ver_detalhes'],
+                    permissoes: ['ver', 'editar', 'gerir_funcoes', 'atribuir_todas'],
+                    contactos: ['ver', 'criar', 'criar_entidade', 'editar', 'apagar', 'importar', 'exportar', 'backup'],
+                    grupos: ['ver', 'criar', 'editar', 'apagar', 'gerir_contactos', 'enviar_email']
+                }
+            },
+            { 
+                username: 'maria_santos', email: 'maria@email.com', password: '123456', status: 'active', 
+                role: 'user',
+                pagePermissions: {
+                    painel: ['ver'],
+                    utilizadores: ['ver', 'criar'],
+                    acessos: ['ver'],
+                    permissoes: ['ver'],
+                    contactos: ['ver', 'criar', 'criar_entidade', 'editar'],
+                    grupos: ['ver', 'criar', 'editar', 'gerir_contactos']
+                }
+            },
+            { 
+                username: 'pedro_costa', email: 'pedro@email.com', password: '123456', status: 'inactive', 
+                role: 'viewer',
+                pagePermissions: {
+                    painel: ['ver'],
+                    utilizadores: ['ver'],
+                    acessos: ['ver'],
+                    permissoes: [],
+                    contactos: ['ver'],
+                    grupos: ['ver']
+                }
+            },
+            { 
+                username: 'ana_oliveira', email: 'ana@email.com', password: '123456', status: 'active', 
+                role: 'user',
+                pagePermissions: {
+                    painel: ['ver'],
+                    utilizadores: ['ver', 'editar'],
+                    acessos: ['ver'],
+                    permissoes: ['ver'],
+                    contactos: ['ver', 'criar', 'criar_entidade', 'editar', 'apagar', 'importar', 'exportar'],
+                    grupos: ['ver', 'criar', 'editar', 'apagar', 'gerir_contactos', 'enviar_email']
+                }
+            }
+        ];
+
+        // Initialize localStorage with default users if empty
+        function initUsers() {
+            if (!localStorage.getItem('users')) {
+                localStorage.setItem('users', JSON.stringify(defaultUsers));
+            } else {
+                // Ensure existing users have role and pagePermissions
+                const users = getUsers();
+                let needsUpdate = false;
+                const defaultMap = {};
+                defaultUsers.forEach(u => { defaultMap[u.username] = u; });
+                users.forEach(user => {
+                    if (!user.role || !user.pagePermissions) {
+                        const def = defaultMap[user.username];
+                        if (def) {
+                            user.role = def.role;
+                            user.pagePermissions = def.pagePermissions;
+                        } else {
+                            user.role = user.role || 'user';
+                            user.pagePermissions = user.pagePermissions || { painel: ['ver'] };
+                        }
+                        needsUpdate = true;
+                    }
+                });
+                if (needsUpdate) {
+                    saveUsers(users);
+                }
+            }
+        }
+
+        // Get users from localStorage
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('users')) || [];
+        }
+
+        // Save users to localStorage
+        function saveUsers(users) {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        // Add access log entry
+        function addAccessLog(username, email) {
+            const accessLog = JSON.parse(localStorage.getItem('accessLog')) || [];
+            const now = new Date();
+            const datetime = now.toLocaleDateString('pt-PT') + ' ' + now.toLocaleTimeString('pt-PT');
+            
+            accessLog.unshift({ username, email, datetime });
+            localStorage.setItem('accessLog', JSON.stringify(accessLog));
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+
+            // Validate username
+            if (usernameInput.value.trim() === '') {
+                usernameGroup.classList.add('error');
+                usernameGroup.querySelector('.error-message').textContent = 'Por favor, insira o nome de utilizador';
+                isValid = false;
+            } else {
+                usernameGroup.classList.remove('error');
+            }
+
+            // Validate password
+            if (passwordInput.value.length < 6) {
+                passwordGroup.classList.add('error');
+                passwordGroup.querySelector('.error-message').textContent = 'A palavra-passe deve ter pelo menos 6 caracteres';
+                isValid = false;
+            } else {
+                passwordGroup.classList.remove('error');
+            }
+
+            if (isValid) {
+                // Load dados.json first, then authenticate
+                loadDadosFromJSON(function() {
+                    initUsers();
+                    // Check credentials against localStorage
+                    const users = getUsers();
+                    const user = users.find(u => 
+                        u.username.toLowerCase() === usernameInput.value.trim().toLowerCase() &&
+                        u.password === passwordInput.value
+                    );
+
+                    if (user) {
+                        // Check if user is active
+                        if (user.status === 'inactive') {
+                            usernameGroup.classList.add('error');
+                            usernameGroup.querySelector('.error-message').textContent = 'Conta desativada. Contacte o administrador.';
+                            passwordGroup.classList.add('error');
+                            passwordGroup.querySelector('.error-message').textContent = 'Conta desativada. Contacte o administrador.';
+                        } else {
+                            // Save current user to sessionStorage
+                            sessionStorage.setItem('currentUser', JSON.stringify(user));
+                            // Add access log entry
+                            addAccessLog(user.username, user.email);
+                            // Redirect to admin panel
+                            window.location.href = './admin.html';
+                        }
+                    } else {
+                        usernameGroup.classList.add('error');
+                        usernameGroup.querySelector('.error-message').textContent = 'Utilizador ou palavra-passe incorretos';
+                        passwordGroup.classList.add('error');
+                        passwordGroup.querySelector('.error-message').textContent = 'Utilizador ou palavra-passe incorretos';
+                    }
+                });
+            }
+        });
+
+        // Remove error on input
+        usernameInput.addEventListener('input', function() {
+            usernameGroup.classList.remove('error');
+        });
+
+        passwordInput.addEventListener('input', function() {
+            passwordGroup.classList.remove('error');
+        });
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeWrapper = document.querySelector('.eye-wrapper');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeWrapper.classList.remove('hidden');
+            } else {
+                passwordInput.type = 'password';
+                eyeWrapper.classList.add('hidden');
+            }
+        }
+
+        // Initialize users on page load
+        loadDadosFromJSON(function() { initUsers(); });
+
+        // Load backup date and time
+        function loadBackupInfo() {
+            var lastBackup = localStorage.getItem('lastBackup');
+            if (lastBackup) {
+                var backup = JSON.parse(lastBackup);
+                var dateEl = document.getElementById('backupDate');
+                var timeEl = document.getElementById('backupTime');
+                if (backup.data) {
+                    var parts = backup.data.split('-');
+                    dateEl.textContent = parts[2] + '/' + parts[1] + '/' + parts[0];
+                }
+                if (backup.hora) {
+                    var timeParts = backup.hora.split(':');
+                    timeEl.textContent = timeParts[0] + ':' + timeParts[1];
+                }
+            }
+        }
+        loadBackupInfo();
+    </script>
+</body>
+</html>

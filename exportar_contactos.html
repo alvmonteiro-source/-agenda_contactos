@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Exportar Contactos</title>
+    <base href="./">
+    <style>
+        body { font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif; min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; position: relative; background: #f0f0f0; overflow-y: scroll; }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png");
+            background-size: 150px;
+            background-repeat: repeat;
+            opacity: 0.08;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+        .container { max-width: 100%; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; margin-bottom: 20px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin: 5px; }
+        .btn-primary { background: #E67E22; color: white; }
+        .btn-success { background: #27ae60; color: white; }
+        .stats { background: #f8f9fa; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        #output { width: 100%; height: 400px; font-family: monospace; font-size: 12px; border: 1px solid #ddd; border-radius: 4px; padding: 10px; margin-top: 15px; }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-header {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        .header-right .card {
+            position: relative;
+            z-index: 1;
+        }
+
+        .card {
+            background: white; padding: 12px 16px; border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s; display: flex;
+            flex-direction: row; align-items: center; gap: 12px;
+            cursor: pointer; border: 1px solid #e1e8ed; color: #000;
+            font-family: inherit; font-size: inherit; text-align: left;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        .card .card-icon { font-size: 28px; }
+        .card .card-text h2 { color: #000; font-size: 14px; margin-bottom: 2px; }
+
+        .user-name {
+            font-weight: 600;
+            color: #000;
+        }
+
+        .user-role {
+            background: linear-gradient(135deg, #D35400 0%, #E67E22 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <div class="header-left">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/ANEPC_logo.png" alt="ANEPC" style="width:120px;height:120px;object-fit:contain;">
+            <div style="line-height:1.2;">
+                <div style="font-size:20px;font-weight:600;color:#000;">AUTORIDADE NACIONAL DE EMERGÊNCIA E PROTEÇÃO CIVIL</div>
+                <div style="font-size:18px;font-weight:600;color:#000;">Comando Sub-Regional de Emergência e Proteção Civil Alto Minho</div>
+                <div style="font-size:16px;font-weight:700;color:#000;margin-top:4px;">LISTA TELEFÓNICA Comando Sub-Regional</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="user-header" id="userHeader"></div>
+            <a href="login.html" class="card" style="margin:0;padding:8px 14px;text-decoration:none;color:#000;">
+                <div class="card-icon" style="font-size:20px;">&#128682;</div>
+                <div class="card-text">
+                    <h2>Sair</h2>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="container">
+        <h1 style="font-size:24px;color:#2c3e50;text-align:center;margin:10px 0 20px 0;">Exportar Base de Dados de Contactos</h1>
+        <p>Este ficheiro extrai os dados do localStorage da página de contactos.</p>
+        
+        <div class="stats" id="stats">A carregar dados...</div>
+        
+        <div>
+            <button class="btn btn-primary" onclick="copiarJSON()">Copiar JSON (Contactos)</button>
+            <button class="btn btn-success" onclick="downloadJSON()">Download JSON (Contactos)</button>
+            <button class="btn btn-primary" onclick="copiarCSV()">Copiar CSV (Contactos)</button>
+            <button class="btn btn-success" onclick="downloadCSV()">Download CSV (Contactos)</button>
+        </div>
+        
+        <h3 style="margin-top: 20px; color: #2c3e50;">Dados Geográficos</h3>
+        <div>
+            <button class="btn btn-success" onclick="downloadGeoJSON()">Download JSON (Distritos/Concelhos/Freguesias)</button>
+            <button class="btn btn-primary" onclick="downloadCSVDistrito()">CSV Distritos</button>
+            <button class="btn btn-primary" onclick="downloadCSVConcelho()">CSV Concelhos</button>
+            <button class="btn btn-primary" onclick="downloadCSVFreguesia()">CSV Freguesias</button>
+        </div>
+        
+        <textarea id="output" readonly></textarea>
+    </div>
+
+    <script src="dados_geograficos.js"></script>
+    <script src="init_data.js"></script>
+    <script>
+        var user = getCurrentUser();
+        if (user) {
+            document.getElementById('userHeader').innerHTML =
+                '<span class="user-name">' + user.username + '</span>' +
+                '<span class="user-role">' + user.role + '</span>';
+        }
+    </script>
+    <script>
+        // Dados de exemplo caso o localStorage esteja vazio
+        var contactosExemplo = [
+            { id: "ex1", nome: "Joao Silva", cargo: "Diretor", entidade: "Camara Municipal de Lisboa", tipo: "Camara Municipal", departamento: "Gabinete do Presidente", emails: ["joao.silva@cm-lisboa.pt"], telefones: ["210 000 001"], telemoveis: ["910 000 001"], faxes: ["210 000 002"], rua: "Praca do Municipio", numero: "1", codigoPostal: "1100-288", localidade: "Lisboa", distrito: "Lisboa", notas: "Contacto principal", dataCriacao: "2024-01-15" },
+            { id: "ex2", nome: "Maria Santos", cargo: "Chefe de Gabinete", entidade: "Junta de Freguesia de Sintra", tipo: "Junta de Freguesia", departamento: "Gabinete", emails: ["maria.santos@jf-sintra.pt"], telefones: ["219 200 000"], telemoveis: ["920 000 002"], faxes: [], rua: "Largo Dr. Lima Brito", numero: "1", codigoPostal: "2710-582", localidade: "Sintra", distrito: "Lisboa", notas: "", dataCriacao: "2024-02-20" },
+            { id: "ex3", nome: "Carlos Ferreira", cargo: "Comandante", entidade: "Bombeiros Voluntarios do Porto", tipo: "Bombeiros", departamento: "Comando", emails: ["cmd@bvporto.pt"], telefones: ["220 000 003"], telemoveis: ["930 000 003"], faxes: ["220 000 004"], rua: "Rua dos Bombeiros", numero: "45", codigoPostal: "4000-001", localidade: "Porto", distrito: "Porto", notas: "Emergencias 112", dataCriacao: "2024-03-10" },
+            { id: "ex4", nome: "Ana Costa", cargo: "Enfermeira Chefe", entidade: "Hospital de Santa Maria", tipo: "Hospital / Centro de Saude", departamento: "Urgencias", emails: ["ana.costa@hsm.min-saude.pt"], telefones: ["210 000 005"], telemoveis: ["910 000 005"], faxes: [], rua: "Av. Prof. Egas Moniz", numero: "", codigoPostal: "1649-028", localidade: "Lisboa", distrito: "Lisboa", notas: "", dataCriacao: "2024-04-05" },
+            { id: "ex5", nome: "Pedro Oliveira", cargo: "Presidente", entidade: "Associacao Desportiva de Coimbra", tipo: "Associacao", departamento: "", emails: ["presidente@adcoimbra.pt"], telefones: ["230 000 006"], telemoveis: ["960 000 006"], faxes: [], rua: "Rua da Associacao", numero: "12", codigoPostal: "3000-001", localidade: "Coimbra", distrito: "Coimbra", notas: "Desporto", dataCriacao: "2024-05-12" }
+        ];
+
+        var contactos = [];
+        var entidades = [];
+
+        function carregarDados() {
+            try {
+                var savedContactos = localStorage.getItem('listaContactos');
+                var savedEntidades = localStorage.getItem('listaEntidades');
+                
+                contactos = savedContactos ? JSON.parse(savedContactos) : contactosExemplo;
+                entidades = savedEntidades ? JSON.parse(savedEntidades) : [];
+                
+                document.getElementById('stats').innerHTML = 
+                    '<strong>Contactos:</strong> ' + contactos.length + 
+                    ' | <strong>Entidades:</strong> ' + entidades.length +
+                    ' | <strong>Total:</strong> ' + (contactos.length + entidades.length);
+                
+                document.getElementById('output').value = JSON.stringify({
+                    contactos: contactos,
+                    entidades: entidades,
+                    dataExportacao: new Date().toISOString()
+                }, null, 2);
+            } catch(e) {
+                document.getElementById('stats').innerHTML = 'Erro ao carregar dados: ' + e.message;
+            }
+        }
+
+        function copiarJSON() {
+            var output = document.getElementById('output');
+            output.select();
+            document.execCommand('copy');
+            alert('JSON copiado para a área de transferência!');
+        }
+
+        function downloadJSON() {
+            var dataStr = document.getElementById('output').value;
+            var blob = new Blob([dataStr], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'contactos_exportados_' + new Date().toISOString().slice(0,10) + '.json';
+            a.click();
+        }
+
+        function copiarCSV() {
+            var csv = gerarCSV();
+            navigator.clipboard.writeText(csv).then(function() {
+                alert('CSV copiado para a área de transferência!');
+            });
+        }
+
+        function downloadCSV() {
+            var csv = gerarCSV();
+            var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'contactos_exportados_' + new Date().toISOString().slice(0,10) + '.csv';
+            a.click();
+        }
+
+        function gerarCSV() {
+            var linhas = ['Tipo,Nome,Entidade,Departamento,Cargo,Emails,Telefones,Telemoveis,Faxes,Rua,Numero,Codigo Postal,Localidade,Distrito,Notas'];
+            
+            contactos.forEach(function(c) {
+                linhas.push([
+                    '"' + (c.tipo || '') + '"',
+                    '"' + (c.nome || '') + '"',
+                    '"' + (c.entidade || '') + '"',
+                    '"' + (c.departamento || '') + '"',
+                    '"' + (c.cargo || '') + '"',
+                    '"' + (c.emails || []).join('; ') + '"',
+                    '"' + (c.telefones || []).join('; ') + '"',
+                    '"' + (c.telemoveis || []).join('; ') + '"',
+                    '"' + (c.faxes || []).join('; ') + '"',
+                    '"' + (c.rua || '') + '"',
+                    '"' + (c.numero || '') + '"',
+                    '"' + (c.codigoPostal || '') + '"',
+                    '"' + (c.localidade || '') + '"',
+                    '"' + (c.distrito || '') + '"',
+                    '"' + (c.notas || '') + '"'
+                ].join(','));
+            });
+
+            entidades.forEach(function(e) {
+                linhas.push([
+                    '"Entidade"',
+                    '"' + (e.sigla || '') + ' - ' + (e.entidade || '') + '"',
+                    '"' + (e.entidade || '') + '"',
+                    '""',
+                    '""',
+                    '"' + (e.emails || []).join('; ') + '"',
+                    '"' + (e.telefones || []).join('; ') + '"',
+                    '"' + (e.telemoveis || []).join('; ') + '"',
+                    '"' + (e.faxes || []).join('; ') + '"',
+                    '"' + (e.rua || '') + '"',
+                    '"' + (e.numero || '') + '"',
+                    '"' + (e.codigoPostal || '') + '"',
+                    '"' + (e.localidade || '') + '"',
+                    '"' + (e.distrito || '') + '"',
+                    '"' + (e.notas || '') + '"'
+                ].join(','));
+            });
+
+            return linhas.join('\n');
+        }
+
+        carregarDados();
+
+        function downloadGeoJSON() {
+            var geoData = typeof DADOS_GEOGRAFICOS !== 'undefined' ? DADOS_GEOGRAFICOS : {};
+            var dataStr = JSON.stringify(geoData, null, 2);
+            var blob = new Blob([dataStr], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'dados_geograficos_' + new Date().toISOString().slice(0,10) + '.json';
+            a.click();
+        }
+
+        function downloadCSVDistrito() {
+            var geoData = typeof DADOS_GEOGRAFICOS !== 'undefined' ? DADOS_GEOGRAFICOS : {};
+            var linhas = ['Distrito,Total Concelhos,Total Freguesias'];
+            Object.keys(geoData).sort().forEach(function(d) {
+                var concelhos = geoData[d].concelhos ? geoData[d].concelhos.length : 0;
+                var fregCount = 0;
+                if (geoData[d].freguesias) {
+                    Object.values(geoData[d].freguesias).forEach(function(f) { fregCount += f.length; });
+                }
+                linhas.push('"' + d + '",' + concelhos + ',' + fregCount);
+            });
+            downloadCSVContent(linhas.join('\n'), 'distritos_' + new Date().toISOString().slice(0,10) + '.csv');
+        }
+
+        function downloadCSVConcelho() {
+            var geoData = typeof DADOS_GEOGRAFICOS !== 'undefined' ? DADOS_GEOGRAFICOS : {};
+            var linhas = ['Distrito,Concelho,Total Freguesias'];
+            Object.keys(geoData).sort().forEach(function(d) {
+                if (geoData[d].concelhos) {
+                    geoData[d].concelhos.sort().forEach(function(c) {
+                        var fregCount = (geoData[d].freguesias && geoData[d].freguesias[c]) ? geoData[d].freguesias[c].length : 0;
+                        linhas.push('"' + d + '","' + c + '",' + fregCount);
+                    });
+                }
+            });
+            downloadCSVContent(linhas.join('\n'), 'concelhos_' + new Date().toISOString().slice(0,10) + '.csv');
+        }
+
+        function downloadCSVFreguesia() {
+            var geoData = typeof DADOS_GEOGRAFICOS !== 'undefined' ? DADOS_GEOGRAFICOS : {};
+            var linhas = ['Distrito,Concelho,Freguesia'];
+            Object.keys(geoData).sort().forEach(function(d) {
+                if (geoData[d].freguesias) {
+                    Object.keys(geoData[d].freguesias).sort().forEach(function(c) {
+                        geoData[d].freguesias[c].sort().forEach(function(f) {
+                            linhas.push('"' + d + '","' + c + '","' + f + '"');
+                        });
+                    });
+                }
+            });
+            downloadCSVContent(linhas.join('\n'), 'freguesias_' + new Date().toISOString().slice(0,10) + '.csv');
+        }
+
+        function downloadCSVContent(csv, filename) {
+            var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+        }
+    </script>
+</body>
+</html>
