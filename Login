@@ -1,0 +1,19 @@
+def login():
+    users = {
+        "admin": "1234",
+        "usuario": "senha"
+    }
+
+    username = input("Usuário: ").strip()
+    password = input("Senha: ").strip()
+
+    if users.get(username) == password:
+        print("Login efetuado com sucesso.")
+        return True
+
+    print("Usuário ou senha inválidos.")
+    return False
+
+
+if __name__ == "__main__":
+    login()
